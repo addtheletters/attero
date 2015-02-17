@@ -38,14 +38,14 @@ public class Ballistic : MonoBehaviour {
 		// point projectile collision
 		RaycastHit hit;
 		if (Physics.Linecast(prevPos, transform.position, out hit)){
-			Debug.Log("Ballistic hit at: " + hit);
+			Debug.Log("Ballistic hit at: " + hit.point);
 			Destroy(this.gameObject);
 		}
 
 	}
 
 
-	static void BallisticLaunch(GameObject projectile, Vector3 velocity){
+	public static void BallisticLaunch(GameObject projectile, Vector3 velocity){
 		Ballistic bal = projectile.GetComponent<Ballistic> ();
 		if (!bal) {
 			Debug.Log("Ballistic Launch: added ballistic component");
