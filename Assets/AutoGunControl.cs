@@ -5,7 +5,7 @@ public abstract class AutoGunControl : GunControl {
 
 	// note: GunControl is UNREGULATED (unlimited rate of fire). AutoGunControl is regulated.
 
-	protected float shotDelay = 0.1f;
+	public float shotDelay = 0.1f;
 	protected float lastShotTime;
 
 	protected new void Update () {

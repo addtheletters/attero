@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ballistic : MonoBehaviour {
+public class Ballistic : MonoBehaviour, ILeadable {
 
 	public float grav = 9.8f;
-	public float drag = 0.0005f;
+	public float drag = 0.001f;
 
 	public float lTime = 5f;
 	public float timer;
@@ -40,7 +40,7 @@ public class Ballistic : MonoBehaviour {
 		// point projectile collision
 		RaycastHit hit;
 		if (Physics.Linecast(prevPos, transform.position, out hit)){
-			Debug.Log("Ballistic hit at: " + hit.point);
+			//Debug.Log("Ballistic hit at: " + hit.point);
 			Destroy(this.gameObject);
 		}
 
@@ -49,12 +49,20 @@ public class Ballistic : MonoBehaviour {
 	public static void BallisticLaunch(GameObject projectile, Vector3 velocity){
 		Ballistic bal = projectile.GetComponent<Ballistic> ();
 		if (!bal) {
-			Debug.Log("Ballistic Launch: added ballistic component");
+			//Debug.Log("Ballistic Launch: added ballistic component");
 			bal = projectile.AddComponent<Ballistic>();
 		}
 		else{
-			Debug.Log("Ballistic Launch: projectile had ballistic component");
+			//Debug.Log("Ballistic Launch: projectile had ballistic component");
 		}
 		bal.vel = velocity;
+	}
+
+	public Vector3 getPosition(){
+		return transform.position;
+	}
+
+	public Vector3 getVelocity(){
+		return vel;
 	}
 }
