@@ -4,7 +4,7 @@ using System.Collections;
 public class Ballistic : MonoBehaviour {
 
 	public float grav = 9.8f;
-	public float drag = 0.001f;
+	public float drag = 0.0005f;
 
 	public float lTime = 10f;
 	public float timer;
@@ -28,10 +28,15 @@ public class Ballistic : MonoBehaviour {
 
 		// update position and velocity
 		prevPos = transform.position;
-		transform.position	+= (1-drag) * vel * Time.fixedDeltaTime; // newton + euler standard motion
-		//transform.position	+= -drag * vel * Time.fixedDeltaTime; // air drag = velocity * dconst
+
+		//vel = ((1 - drag) * vel) + (Vector3.down * (float)(grav * 0.5 *  Time.fixedDeltaTime));
+		//transform.position += vel * Time.fixedDeltaTime;
+
+		transform.position	+= (1) * vel * Time.fixedDeltaTime; // newton + euler standard motion
+		transform.position	+= vel.normalized * -drag * vel.sqrMagnitude * Time.fixedDeltaTime; // air drag = velocity^2 * dconst
 		transform.position  += Vector3.down * (float)(grav * 0.5 * (Time.fixedDeltaTime * Time.fixedDeltaTime)); // gravity = (1/2)gt^2
 		vel = (transform.position - prevPos) / Time.fixedDeltaTime; // new velocity
+
 
 		// debug line
 		Debug.DrawLine (prevPos, transform.position, Color.red, 1f);
