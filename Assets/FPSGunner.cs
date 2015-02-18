@@ -27,6 +27,9 @@ public class FPSGunner : MonoBehaviour {
 	void Update () {
 		if(Input.GetButtonDown("Fire1")){
 			Shoot();
+			if(!Screen.lockCursor){
+				Screen.lockCursor = true;
+			}
 		}
 	}
 

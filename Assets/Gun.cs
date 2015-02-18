@@ -7,16 +7,7 @@ public class Gun : MonoBehaviour {
 	public float muzzleVel	= 10f;
 	public GameObject projectile;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
 
-	}
-	
 	public GameObject FireAt(Vector3 target){
 		return Fire (target - transform.position);
 	}

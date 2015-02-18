@@ -17,20 +17,21 @@ public class Ballistic : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
+		// using fixed so physics predictions are more likely accurate
+
 		// projectile life, kill if life has expired
-		timer += Time.deltaTime;
+		timer += Time.fixedDeltaTime;
 		if (timer > lTime) {
 			Destroy(this.gameObject);
 		}
 
 		// update position and velocity
 		prevPos = transform.position;
-		transform.position	+= vel * Time.deltaTime; // newton + euler standard motion 
-		transform.position	+= -drag * vel * Time.deltaTime; // air drag = velocity * dconst
-		transform.position  += Vector3.down * (float)(grav * 0.5 * (Time.deltaTime * Time.deltaTime)); // gravity = (1/2)gt^2
-		vel = (transform.position - prevPos) / Time.deltaTime; // new velocity
+		transform.position	+= (1-drag) * vel * Time.fixedDeltaTime; // newton + euler standard motion
+		//transform.position	+= -drag * vel * Time.fixedDeltaTime; // air drag = velocity * dconst
+		transform.position  += Vector3.down * (float)(grav * 0.5 * (Time.fixedDeltaTime * Time.fixedDeltaTime)); // gravity = (1/2)gt^2
+		vel = (transform.position - prevPos) / Time.fixedDeltaTime; // new velocity
 
 		// debug line
 		Debug.DrawLine (prevPos, transform.position, Color.red, 1f);
