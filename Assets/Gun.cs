@@ -4,7 +4,7 @@ using System.Collections;
 public class Gun : MonoBehaviour {
 
 	public float inaccuracy	= 1; // in degrees, forming a cone of possible shots around the aim line
-	public float muzzleVel	= 10f;
+	public float muzzleVel	= 300f;
 	public GameObject projectile;
 
 

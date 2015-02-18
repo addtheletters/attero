@@ -39,7 +39,7 @@ public class Ballistic : MonoBehaviour {
 
 
 		// debug line
-		Debug.DrawLine (prevPos, transform.position, Color.red, 1f);
+		Debug.DrawLine (prevPos, transform.position, new Color(vel.sqrMagnitude / 1000f, 0, 0), 1f);
 
 		// point projectile collision
 		RaycastHit hit;
