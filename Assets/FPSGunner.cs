@@ -1,39 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FPSGunner : MonoBehaviour {
+public class FPSGunner : AutoGunControl {
 
-	Gun fpsgun;
 	GameObject cam;
 
-	// Use this for initialization
-	void Start () {
+	new void Start () {
+		base.Start ();
+
 		cam = FindCamera ();
 		if (!cam) {
 			Debug.Log("FPSGunner: no camera found");
 		}
-		fpsgun = GetComponent<Gun>();
-		if (!fpsgun) {
-			Debug.Log ("FPSGunner: no gun found");
-		}
 		Screen.lockCursor = true;
+		/*theGun = GetComponent<Gun>();
+		if (!theGun) {
+			Debug.Log ("FPSGunner: no gun found");
+		}*/
 	}
 
 	GameObject FindCamera(){
 		return Camera.main.gameObject;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetButtonDown("Fire1")){
-			Shoot();
-			if(!Screen.lockCursor){
-				Screen.lockCursor = true;
-			}
+	new void Update () {
+		base.Update ();
+		if(!Screen.lockCursor){
+			Screen.lockCursor = true;
 		}
 	}
 
-	void Shoot(){
-		fpsgun.Fire (cam.transform.forward);
+	public override bool shouldFire(){
+		return Input.GetButton ("Fire1");
+	}
+
+	public override void Shoot(){
+		theGun.Fire (cam.transform.forward);
 	}
 }

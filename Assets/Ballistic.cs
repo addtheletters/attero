@@ -6,16 +6,12 @@ public class Ballistic : MonoBehaviour {
 	public float grav = 9.8f;
 	public float drag = 0.0005f;
 
-	public float lTime = 10f;
+	public float lTime = 5f;
 	public float timer;
 
 	public Vector3 vel;
 	Vector3 prevPos;
-	
-	// Use this for initialization
-	void Start () {
 
-	}
 	
 	void FixedUpdate () {
 		// using fixed so physics predictions are more likely accurate
@@ -39,7 +35,7 @@ public class Ballistic : MonoBehaviour {
 
 
 		// debug line
-		Debug.DrawLine (prevPos, transform.position, new Color(vel.sqrMagnitude / 1000f, 0, 0), 1f);
+		Debug.DrawLine (prevPos, transform.position, DebugColors.TrailColor(vel.sqrMagnitude), 1f);
 
 		// point projectile collision
 		RaycastHit hit;
@@ -49,7 +45,6 @@ public class Ballistic : MonoBehaviour {
 		}
 
 	}
-
 
 	public static void BallisticLaunch(GameObject projectile, Vector3 velocity){
 		Ballistic bal = projectile.GetComponent<Ballistic> ();

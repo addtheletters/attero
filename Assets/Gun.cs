@@ -7,6 +7,7 @@ public class Gun : MonoBehaviour {
 	public float muzzleVel	= 300f;
 	public GameObject projectile;
 
+	float shotsFired = 0;
 
 	public GameObject FireAt(Vector3 target){
 		return Fire (target - transform.position);
@@ -25,9 +26,11 @@ public class Gun : MonoBehaviour {
 		Ballistic.BallisticLaunch (fired, launchvec);
 
 		// debug lines
-		Debug.DrawRay (transform.position, (direction * muzzleVel).normalized * 50f, Color.blue, 3f);
-		Debug.DrawRay (transform.position, launchvec.normalized * 50f, Color.green, 3f);
-		
+		Debug.DrawRay (transform.position, (direction * muzzleVel).normalized * 20f, DebugColors.AIMLINE, 3f);
+		Debug.DrawRay (transform.position, launchvec.normalized * 20f, DebugColors.FIRELINE, 3f);
+
+		shotsFired ++;
+
 		return fired;
 	}
 }
