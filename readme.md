@@ -9,4 +9,5 @@ Inspired by a Swedish metal song. This project includes:
 planned:
 - relatively accurate shot-leading and trajectory estimation
 - planes
+- bombs and artillery
 - city / street / building generator
