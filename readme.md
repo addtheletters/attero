@@ -1,7 +1,7 @@
 attero
 ====
 
-Inspired by a song. This project includes:
+Inspired by a Swedish metal song. This project includes:
 -simple ballistics
 -tracers
 -gun turrets
