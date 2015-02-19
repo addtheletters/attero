@@ -28,7 +28,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		//vel = ((1 - drag) * vel) + (Vector3.down * (float)(grav * 0.5 *  Time.fixedDeltaTime));
 		//transform.position += vel * Time.fixedDeltaTime;
 
-		transform.position	+= (1) * vel * Time.fixedDeltaTime; // newton + euler standard motion
+		transform.position	+= vel * Time.fixedDeltaTime; // newton + euler standard motion
 		transform.position	+= vel.normalized * -dragConst * Mathf.Pow(vel.magnitude, dragExpon) * Time.fixedDeltaTime; // air drag = velocity^2 * dconst
 		transform.position  += Vector3.down * (float)(grav * 0.5 * (Time.fixedDeltaTime * Time.fixedDeltaTime)); // gravity = (1/2)gt^2
 		vel = (transform.position - prevPos) / Time.fixedDeltaTime; // new velocity

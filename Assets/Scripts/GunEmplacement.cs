@@ -7,12 +7,40 @@ public class GunEmplacement : AutoGunControl {
 	public bool targetFound;
 	public float range = 30f;
 
+	// change behaviour such that:
+	// -takes longer to acquire target
+	// -periodic scans for targets
+	// -when target acquired, delay before firing starts
+	// -when target leaves, not immediate switch target
+	// -if target comes back before lock lost, continues shooting immediately
+	// -while firing, much increased time between scans for targets
+
+
 	public float lookRequestedIn;
 	public float lookTime = 1f; // delay between scans for targets, could be thought of as time needed to check if target is valid
+
+	public bool firing;
+	public float aimTime = 0.3f; // delay between target chosen and beginning of fire on target
+
+	public float targetStickiness = 0.5f; // scale on time to retarget while firing at a target in-range
 
 	// Update is called once per frame
 	new void Update () {
 		base.Update ();
+
+		if(!targetFound || !TargetInRange(currentTarget)){ // if no current target or target has left
+			lookRequestedIn -= Time.deltaTime; // we will look for a new target in lookTime
+			if (lookRequestedIn <= 0) { // if need to look for target
+				FindTarget(); // retarget
+				lookRequestedIn = lookTime; // reset look timer
+			}
+		}
+		else{
+
+		}
+
+
+		/*
 
 		if(targetFound){ // if we have a target
 			// make sure it hasn't gone out of range
@@ -29,6 +57,8 @@ public class GunEmplacement : AutoGunControl {
 			lookRequestedIn = lookTime; // reset look timer
 		}
 		// retargets occur regardless of whether we already have a target or not, this may change
+
+		*/
 	}
 
 
