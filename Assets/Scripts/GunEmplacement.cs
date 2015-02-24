@@ -82,7 +82,7 @@ public class GunEmplacement : AutoGunControl {
 		else{
 			targetFound = true;
 			currentTarget = (ILeadable)closest.GetComponent(typeof(ILeadable));
-			Debug.Log ("GunEmplacement: target found! + " + currentTarget.getPosition() + " at range " + minsqrdist);
+			Debug.Log ("GunEmplacement: target found! + " + currentTarget.getPosition() + " at squared range " + minsqrdist);
 		}
 	}
 

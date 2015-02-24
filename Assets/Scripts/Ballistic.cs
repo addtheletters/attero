@@ -5,7 +5,8 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	public float grav = 9.8f;
 	public float dragConst = 0.001f;
-	public float dragExpon = 2f;
+	//public float dragExpon = 2f;
+	// set to the same thing forever and ever, so evaluating the sqrt and pow just waste computation
 	public float lTime = 5f;
 	public float timer;
 
@@ -15,24 +16,15 @@ public class Ballistic : MonoBehaviour, ILeadable {
 	
 	void FixedUpdate () {
 		// using fixed so physics predictions are more likely accurate
+		float timescale = Time.fixedDeltaTime;
 
 		// projectile life, kill if life has expired
-		timer += Time.fixedDeltaTime;
+		timer += timescale;
 		if (timer > lTime) {
 			Destroy(this.gameObject);
 		}
 
-		// update position and velocity
-		prevPos = transform.position;
-
-		//vel = ((1 - drag) * vel) + (Vector3.down * (float)(grav * 0.5 *  Time.fixedDeltaTime));
-		//transform.position += vel * Time.fixedDeltaTime;
-
-		transform.position	+= vel * Time.fixedDeltaTime; // newton + euler standard motion
-		transform.position	+= vel.normalized * -dragConst * Mathf.Pow(vel.magnitude, dragExpon) * Time.fixedDeltaTime; // air drag = velocity^2 * dconst
-		transform.position  += Vector3.down * (float)(grav * 0.5 * (Time.fixedDeltaTime * Time.fixedDeltaTime)); // gravity = (1/2)gt^2
-		vel = (transform.position - prevPos) / Time.fixedDeltaTime; // new velocity
-
+		EulerPhysicsStep (timescale);
 
 		// debug line
 		Debug.DrawLine (prevPos, transform.position, DebugColors.TrailColor(vel.sqrMagnitude), 1f);
@@ -44,6 +36,28 @@ public class Ballistic : MonoBehaviour, ILeadable {
 			Destroy(this.gameObject);
 		}
 
+	}
+
+	void EulerPhysicsStep(float timescale){
+		// update position and velocity
+		prevPos = transform.position;
+		
+		//vel = ((1 - drag) * vel) + (Vector3.down * (float)(grav * 0.5 *  Time.fixedDeltaTime));
+		//transform.position += vel * Time.fixedDeltaTime;
+		
+		transform.position	+= vel * timescale; // newton + euler standard motion
+		// need to remove squares, how to get rid of .normalized? maybe not possible
+		transform.position	+= vel.normalized * -dragConst * vel.sqrMagnitude * timescale; //Mathf.Pow(vel.magnitude, dragExpon) * timescale; // air drag = velocity^2 * dconst
+		transform.position  += Vector3.down * (float)(grav * 0.5 * (timescale * timescale)); // gravity = (1/2)gt^2 // gravity is actually ignorable when drag exists
+		vel = (transform.position - prevPos) / Time.fixedDeltaTime; // new velocity
+	}
+
+	Vector3 getAcceleration(){
+		// drag
+		Vector3 accel = vel.normalized * -dragConst * vel.sqrMagnitude;
+		// gravity
+		accel += Vector3.down * grav;
+		return accel;
 	}
 
 	public static void BallisticLaunch(GameObject projectile, Vector3 velocity){
