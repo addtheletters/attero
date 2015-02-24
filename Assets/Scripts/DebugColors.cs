@@ -6,7 +6,7 @@ public class DebugColors {
 	public static Color FIRELINE = Color.green;
 
 	public static Color TrailColor(float speed){
-		return new Color (speed / 1000f, 0, 0);
+		return new Color (speed / 90000f, 0, 0);
 	}
 	
 	public static Color LEADLINE = Color.magenta;

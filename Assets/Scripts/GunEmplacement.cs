@@ -27,20 +27,25 @@ public class GunEmplacement : AutoGunControl {
 	// Update is called once per frame
 	new void Update () {
 		base.Update ();
-
-		if(!targetFound || !TargetInRange(currentTarget)){ // if no current target or target has left
-			lookRequestedIn -= Time.deltaTime; // we will look for a new target in lookTime
-			if (lookRequestedIn <= 0) { // if need to look for target
-				FindTarget(); // retarget
-				lookRequestedIn = lookTime; // reset look timer
+		/*
+		if (lookRequestedIn <= 0) { // if need to look for target
+			targetFound = false;
+			currentTarget = null;
+			FindTarget(); // retarget
+			lookRequestedIn = lookTime; // reset look timer
+		}
+		if (!TargetInRange (currentTarget)) {
+			firing = false;
+			if (!targetFound) {
+				// if no current target or target has left
+				lookRequestedIn -= Time.deltaTime; // we will look for a new target in lookTime
 			}
 		}
 		else{
-
+			firing = true;
 		}
+		*/
 
-
-		/*
 
 		if(targetFound){ // if we have a target
 			// make sure it hasn't gone out of range
@@ -58,7 +63,6 @@ public class GunEmplacement : AutoGunControl {
 		}
 		// retargets occur regardless of whether we already have a target or not, this may change
 
-		*/
 	}
 
 
