@@ -5,6 +5,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	public float grav = 9.8f;
 	public float dragConst = 0.001f; // breaks physics if greater than about 0.33f
+	public float mass = 1f; // wao
 	//public float dragExpon = 2f;
 	// set to the same thing forever and ever, so evaluating the sqrt and pow just waste computation
 	public float lTime = 5f;
@@ -12,7 +13,6 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	public Vector3 vel;
 	Vector3 prevPos;
-
 	
 	void FixedUpdate () {
 		// using fixed so physics predictions are more likely accurate
@@ -24,10 +24,10 @@ public class Ballistic : MonoBehaviour, ILeadable {
 			Destroy(this.gameObject);
 		}
 
-		EulerPhysicsStep (timescale);
+		VerletPhysicsStep (timescale);
 
 		// debug line
-		Debug.DrawLine (prevPos, transform.position, DebugColors.TrailColor(vel.sqrMagnitude), 1f);
+		Debug.DrawLine (prevPos, transform.position, DebugColors.TrailColor(vel.sqrMagnitude), .3f);
 
 		// point projectile collision
 		RaycastHit hit;
@@ -39,25 +39,19 @@ public class Ballistic : MonoBehaviour, ILeadable {
 	}
 
 	void EulerPhysicsStep(float timescale){
-		// update position and velocity
 		prevPos = transform.position;
-		
-		//vel = ((1 - drag) * vel) + (Vector3.down * (float)(grav * 0.5 *  timescale));
-		//transform.position += vel * timescale;
 
-		// this is an odd mix of euler drag and partially integrated gravity
-		/*
-		transform.position	+= vel * timescale; // newton + euler standard motion
-		transform.position	+= vel.normalized * -dragConst * vel.sqrMagnitude * timescale; //Mathf.Pow(vel.magnitude, dragExpon) * timescale; // air drag = velocity^2 * dconst
-		transform.position  += Vector3.down * (float)(grav * 0.5 * (timescale * timescale)); // gravity = (1/2)gt^2 // gravity is actually ignorable when drag exists
-		vel = (transform.position - prevPos) / timescale; // new velocity
-		// this computation should not need to happen...
-		*/
+		transform.position += vel * timescale;
+		vel += getAcceleration() * timescale;
+	}
 
-		// proper Euler, I think
-		vel = vel + getAcceleration () * timescale; // v1 = v0 + a*t
-		transform.position += (vel + (getAcceleration() * (float) (0.5 * timescale))) * timescale; // p = p1 + v*dt + .5*a*dt^2
-
+	void VerletPhysicsStep(float timescale){
+		prevPos = transform.position;
+		//http://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
+		Vector3 accel		= getAcceleration ();
+		transform.position	+= (vel + 0.5f * accel * timescale) * timescale; // (vel * timescale) + (accel * 0.5f * timescale * timescale); // p = p1 + v*dt + .5*a*dt^2 // (not quite euler)
+		Vector3 aTPlus		= 2f * (transform.position - prevPos - (vel * timescale)); // future frame acceleration
+		vel 				+= 0.5f * (accel + aTPlus) * timescale ;
 	}
 
 	public static void BallisticLaunch(GameObject projectile, Vector3 velocity){
@@ -72,6 +66,18 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		bal.vel = velocity;
 	}
 
+	public static float AirDensity(Vector3 position){
+		return 1f;
+	}
+
+	public float getSqrTerminalVelocity(){
+		return mass * grav / dragConst;
+	}
+
+	public float getCharacteristicTime(){
+		return Mathf.Sqrt(getSqrTerminalVelocity()) / grav;
+	}
+
 	public Vector3 getPosition(){
 		return transform.position;
 	}
@@ -82,8 +88,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	Vector3 getAcceleration(){
 		// drag
-		Vector3 accel = vel.normalized * -dragConst * vel.sqrMagnitude;
-		// need to remove squares, how to get rid of .normalized? maybe not possible
+		Vector3 accel = vel.normalized * -dragConst * vel.sqrMagnitude * AirDensity(transform.position) / mass;
 		// gravity
 		accel += Vector3.down * grav;
 		return accel;
