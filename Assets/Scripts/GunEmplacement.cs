@@ -18,11 +18,19 @@ public class GunEmplacement : AutoGunControl {
 
 	public float lookRequestedIn;
 	public float lookTime = 1f; // delay between scans for targets, could be thought of as time needed to check if target is valid
-
+	// need to alter to integrate aimTime and targetStickiness
 	public bool firing;
 	public float aimTime = 0.3f; // delay between target chosen and beginning of fire on target
-
+	// need to implement correctly
 	public float targetStickiness = 0.5f; // scale on time to retarget while firing at a target in-range
+	// need to implement
+	
+	int layerMask;
+
+	new void Start(){
+		base.Start ();
+		layerMask = 1 << LayerMask.NameToLayer("Obscurement"); // obscurement layer
+	}
 
 	// Update is called once per frame
 	new void Update () {
@@ -75,6 +83,7 @@ public class GunEmplacement : AutoGunControl {
 				continue;
 			}
 			float sqrdist = (close[i].gameObject.transform.position - transform.position).sqrMagnitude;
+			// need to fix to account for target sightline loss
 			if(sqrdist < minsqrdist){
 				closest = close[i].gameObject;
 				minsqrdist = sqrdist;
@@ -94,7 +103,6 @@ public class GunEmplacement : AutoGunControl {
 		if (!TargetInRange (target)) {
 			return false;
 		}
-		int layerMask = 1 << LayerMask.NameToLayer("Obscurement"); // obscurement layer
 		RaycastHit hit;
 		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, layerMask);
 		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
