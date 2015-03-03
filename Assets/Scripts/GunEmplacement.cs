@@ -25,11 +25,11 @@ public class GunEmplacement : AutoGunControl {
 	public float targetStickiness = 0.5f; // scale on time to retarget while firing at a target in-range
 	// need to implement
 	
-	int layerMask;
+	int obscurementMask;
 
 	new void Start(){
 		base.Start ();
-		layerMask = 1 << LayerMask.NameToLayer("Obscurement"); // obscurement layer
+		obscurementMask = 1 << LayerMask.NameToLayer("Obscurement"); // obscurement layer
 	}
 
 	// Update is called once per frame
@@ -104,7 +104,7 @@ public class GunEmplacement : AutoGunControl {
 			return false;
 		}
 		RaycastHit hit;
-		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, layerMask);
+		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, obscurementMask);
 		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
 		if (castResult) {
 			Debug.Log(hit.collider.gameObject);
