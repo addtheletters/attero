@@ -49,7 +49,7 @@ public class GunEmplacement : AutoGunControl {
 
 		if(targetFound){ // if we have a target
 			// make sure it hasn't gone out of range
-			if(!TargetInRange(currentTarget)){
+			if(!TargetInSight(currentTarget)){
 				currentTarget = null;
 				targetFound = false;
 				//Debug.Log ("GunEmplacement: target left range");
@@ -90,6 +90,20 @@ public class GunEmplacement : AutoGunControl {
 		}
 	}
 
+	bool TargetInSight( ILeadable target ){
+		if (!TargetInRange (target)) {
+			return false;
+		}
+		int layerMask = 1 << 8; // obscurement layer
+		RaycastHit hit;
+		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, layerMask);
+		Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
+		if (castResult) {
+			Debug.Log(hit.collider.gameObject);
+		}
+		return !castResult;
+	}
+
 	bool TargetInRange( ILeadable target ){
 		return (target.getPosition () - transform.position).sqrMagnitude < (range * range); 
 	}
@@ -101,7 +115,7 @@ public class GunEmplacement : AutoGunControl {
 	}
 
 	public override bool shouldFire(){
-		return targetFound;
+		return targetFound && TargetInSight(currentTarget);
 	}
 
 }
