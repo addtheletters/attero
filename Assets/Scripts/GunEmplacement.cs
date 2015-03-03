@@ -94,10 +94,10 @@ public class GunEmplacement : AutoGunControl {
 		if (!TargetInRange (target)) {
 			return false;
 		}
-		int layerMask = 1 << 8; // obscurement layer
+		int layerMask = 1 << LayerMask.NameToLayer("Obscurement"); // obscurement layer
 		RaycastHit hit;
 		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, layerMask);
-		Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
+		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
 		if (castResult) {
 			Debug.Log(hit.collider.gameObject);
 		}
