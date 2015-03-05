@@ -14,7 +14,8 @@ public class CityGenerator : MonoBehaviour {
 
 	public List<GameObject> generated;
 
-	public float minBuildingHeight = 1f;
+	public float cityHeightIndex	= 10f;
+	public float minBuildingHeight	= .5f;
 
 	void Start () {
 		generated = GenerateCity ();
@@ -66,11 +67,11 @@ public class CityGenerator : MonoBehaviour {
 	}
 
 	float getBuildingHeightBase(Vector3 pos){
-		return Mathf.Max(Random.Range(0.5f, 2f), 10 - Mathf.Sqrt (pos.x * pos.x + pos.z * pos.z));//Mathf.Abs(pos.x) + Mathf.Abs(pos.z);
+		return Mathf.Max(Random.Range(0.5f, 2f), cityHeightIndex - Mathf.Sqrt (pos.x * pos.x + pos.z * pos.z));//Mathf.Abs(pos.x) + Mathf.Abs(pos.z);
 	}
 
 	float newBuildingHeightRand(Vector3 pos){
-		return Random.Range(-8, 2);
+		return Random.Range(-8, 0);
 	}
 
 }

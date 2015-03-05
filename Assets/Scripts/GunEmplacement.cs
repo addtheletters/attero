@@ -20,10 +20,11 @@ public class GunEmplacement : AutoGunControl {
 	public float lookTime = 1f; // delay between scans for targets, could be thought of as time needed to check if target is valid
 	// need to alter to integrate aimTime and targetStickiness
 	public bool firing;
+	
 	public float aimTime = 0.3f; // delay between target chosen and beginning of fire on target
-	// need to implement correctly
-	public float targetStickiness = 0.5f; // scale on time to retarget while firing at a target in-range
-	// need to implement
+	public float readyToFireIn;  // is set to aimTime, can fire when <= 0
+	public float refindTargetTime = 0.3f;   // how long the target needs to be gone for before a new target is acquired
+	public float targetMissingFor;			// how long has the target been unseen or out of range
 	
 	int obscurementMask;
 
@@ -35,6 +36,7 @@ public class GunEmplacement : AutoGunControl {
 	// Update is called once per frame
 	new void Update () {
 		base.Update ();
+
 		/*
 		if (lookRequestedIn <= 0) { // if need to look for target
 			targetFound = false;
@@ -54,7 +56,6 @@ public class GunEmplacement : AutoGunControl {
 		}
 		*/
 
-
 		if(targetFound){ // if we have a target
 			// make sure it hasn't gone out of range
 			if(!TargetInSight(currentTarget)){
@@ -71,6 +72,27 @@ public class GunEmplacement : AutoGunControl {
 		}
 		// retargets occur regardless of whether we already have a target or not, this may change
 
+	}
+
+	void RedoUpdate(){
+		base.Update ();
+		if (targetFound) {
+			if(readyToFireIn > 0){
+				readyToFireIn -= Time.deltaTime;
+			}
+			if(TargetInSight(currentTarget)){
+				targetMissingFor = 0;
+			}
+			else{
+				targetMissingFor += Time.deltaTime;
+				if(targetMissingFor > refindTargetTime){
+
+				}
+			}
+		}
+		else{
+
+		}
 	}
 
 
@@ -99,10 +121,52 @@ public class GunEmplacement : AutoGunControl {
 		}
 	}
 
+	ILeadable RedoFindTarget(){
+		Collider[] close			= Physics.OverlapSphere (transform.position, range);
+		ILeadable closestVisible	= default(ILeadable);
+		float minRankVal 			= float.MaxValue;
+		for(int i = 0; i < close.Length; i++){
+			ILeadable tempLeadable = (ILeadable)close[i].GetComponent(typeof(ILeadable));
+			if(tempLeadable == null || ViewToObstructed(tempLeadable)){
+				continue;
+			}
+			float targetRank = GetTargetRank(tempLeadable);
+			if(targetRank < minRankVal){
+				closestVisible	= tempLeadable;
+				minRankVal		= targetRank;
+			}
+		}
+		if (closestVisible == default(ILeadable)) {
+			//Debug.Log("GunEmplacement: found no visible target within range");
+			return null; 
+		}
+		else{
+			Debug.Log ("GunEmplacement: target found! + " + currentTarget.getPosition() + " with target rank " + minRankVal);
+			return closestVisible;
+		}
+	}
+
+	float GetTargetRank(ILeadable target){
+		// returns a value which gauges the target priority, based on what kind of
+		// target it is and how easy it is to hit
+		// right now just returns a distance squared
+		return (target.getPosition () - transform.position).sqrMagnitude;
+	}
+
+	void SetTarget(ILeadable target){
+		currentTarget = target;
+		targetFound	  = true;
+		readyToFireIn = aimTime;
+	}
+
 	bool TargetInSight( ILeadable target ){
 		if (!TargetInRange (target)) {
 			return false;
 		}
+		return ViewToObstructed (target);
+	}
+
+	bool ViewToObstructed(ILeadable target){
 		RaycastHit hit;
 		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, obscurementMask);
 		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
