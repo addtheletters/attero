@@ -12,7 +12,9 @@ public class FPSGunner : AutoGunControl {
 		if (!cam) {
 			Debug.Log("FPSGunner: no camera found");
 		}
-		Screen.lockCursor = true;
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+		//Screen.lockCursor = true;
 		/*theGun = GetComponent<Gun>();
 		if (!theGun) {
 			Debug.Log ("FPSGunner: no gun found");
@@ -25,8 +27,9 @@ public class FPSGunner : AutoGunControl {
 	
 	new void Update () {
 		base.Update ();
-		if(!Screen.lockCursor){
-			Screen.lockCursor = true;
+		if(!(Cursor.lockState == CursorLockMode.Locked)){
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
 		}
 	}
 
