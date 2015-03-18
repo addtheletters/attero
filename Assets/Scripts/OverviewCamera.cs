@@ -3,28 +3,29 @@ using System.Collections;
 
 public class OverviewCamera : MonoBehaviour {
 
-	public float baseMoveSpeed = 1f;
+	private Vector3 baseRotation;
+
+	public float baseMoveSpeed = 5f;
 	public float baseHeight;
 
-	public float zoomSpeed = 1f;
+	public float zoomSpeed = 180f;
 	public float baseZoomFOV;
-	public float minZoomFOV;
-	public float maxZoomFOV;
+	public float minZoomFOV = 10;
+	public float maxZoomFOV = 120;
 
 	private Camera cam;
 
 	// Use this for initialization
 	void Start () {
-		if (baseHeight == 0) {
+		baseRotation = transform.rotation.eulerAngles;
+		if (baseHeight == 0)
 			baseHeight = transform.position.y;
-		}
+
 		cam = Camera.main;
-		if (!cam) {
+		if (!cam)
 			Debug.Log("OverviewCamera: no camera found");
-		}
-		else{
+		else
 			baseZoomFOV = cam.fieldOfView;
-		}
 	}
 	
 	// Update is called once per frame
@@ -36,7 +37,7 @@ public class OverviewCamera : MonoBehaviour {
 		// or just have scroll dependent on distance mouse is from center
 		transform.Translate ( baseMoveSpeed * Time.deltaTime * new Vector3( Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")), Space.World);
 		//Debug.Log (Input.GetAxis ("Mouse ScrollWheel"));
-		cam.fieldOfView += Input.GetAxis("Mouse ScrollWheel") * zoomSpeed * Time.deltaTime;
+		cam.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed * Time.deltaTime;
 
 		if (cam.fieldOfView < minZoomFOV)
 			cam.fieldOfView = minZoomFOV;
