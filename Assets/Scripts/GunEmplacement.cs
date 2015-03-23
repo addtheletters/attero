@@ -117,7 +117,7 @@ public class GunEmplacement : AutoGunControl {
 		else{
 			targetFound = true;
 			currentTarget = (ILeadable)closest.GetComponent(typeof(ILeadable));
-			Debug.Log ("GunEmplacement: target found! + " + currentTarget.getPosition() + " at squared range " + minsqrdist);
+			//Debug.Log ("GunEmplacement: target found! + " + currentTarget.getPosition() + " at squared range " + minsqrdist);
 		}
 	}
 
@@ -171,7 +171,7 @@ public class GunEmplacement : AutoGunControl {
 		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, obscurementMask);
 		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
 		if (castResult) {
-			Debug.Log(hit.collider.gameObject);
+			//Debug.Log(hit.collider.gameObject);
 		}
 		return !castResult;
 	}

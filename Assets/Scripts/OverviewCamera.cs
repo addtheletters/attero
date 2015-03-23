@@ -3,21 +3,38 @@ using System.Collections;
 
 public class OverviewCamera : MonoBehaviour {
 
-	private Vector3 baseRotation;
+	public float 		homeFOV;
+	private Quaternion 	homeRot;
+	private Vector3 	homePos;
 
-	public float baseMoveSpeed = 5f;
+	public bool rotReset	= false;
+	public bool zoomReset	= false;
+	public bool posReset	= false;
+
+	private float 		startResetRotTime;
+	private Quaternion	startResetRot;
+
+	private Vector3 posResetVel;
+	private float fovResetVel;
+
+	public float resetDur = 0.5f;
+
+	public float baseMoveSpeed = 10f;
 	public float baseHeight;
 
-	public float zoomSpeed = 180f;
-	public float baseZoomFOV;
+	public float zoomSpeed = 360f;
+
 	public float minZoomFOV = 10;
 	public float maxZoomFOV = 120;
 
 	private Camera cam;
 
+	public float camSnapMargin = .001f;
+
 	// Use this for initialization
 	void Start () {
-		baseRotation = transform.rotation.eulerAngles;
+		homeRot = transform.rotation;
+		homePos = transform.position;
 		if (baseHeight == 0)
 			baseHeight = transform.position.y;
 
@@ -25,7 +42,7 @@ public class OverviewCamera : MonoBehaviour {
 		if (!cam)
 			Debug.Log("OverviewCamera: no camera found");
 		else
-			baseZoomFOV = cam.fieldOfView;
+			homeFOV = cam.fieldOfView;
 	}
 	
 	// Update is called once per frame
@@ -33,20 +50,102 @@ public class OverviewCamera : MonoBehaviour {
 		//Vector2 mousepos = new Vector2 (Input.mousePosition.x, Input.mousePosition.y);
 
 		// hmmm how to implement? 
-		// eventually might want scroll acceleration
+		// eventually might want additional scroll acceleration
 		// or just have scroll dependent on distance mouse is from center
-		transform.Translate ( baseMoveSpeed * Time.deltaTime * new Vector3( Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")), Space.World);
-		//Debug.Log (Input.GetAxis ("Mouse ScrollWheel"));
-		cam.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed * Time.deltaTime;
 
+		// if tries to move camera during reset, abort reset
+
+		float horiz = Input.GetAxis ("Horizontal");
+		float verti = Input.GetAxis ("Vertical");
+		if(horiz != 0 || verti != 0){
+			transform.Translate ( baseMoveSpeed * Time.deltaTime * new Vector3(horiz, 0, verti), Space.World);
+			//Debug.Log ("camera meaningfully moved");
+			posReset = false;
+		}
+		float scroll = Input.GetAxis ("Mouse ScrollWheel");
+		if(scroll != 0){
+			cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
+			zoomReset = false;
+		}
 		if (cam.fieldOfView < minZoomFOV)
 			cam.fieldOfView = minZoomFOV;
 		if (cam.fieldOfView > maxZoomFOV)
 			cam.fieldOfView = maxZoomFOV;
+
+		if (Input.GetKey (KeyCode.Space)) {
+			Debug.Log ("Overview Cam: Resetting camera.");
+			ResetRotation();
+			ResetZoom();
+			ResetPosition();
+		}
+
+
+
+		if (rotReset) {
+			// TODO: this better maybe?
+			if( Quaternion.Angle(transform.rotation, homeRot) < camSnapMargin * 100){
+				//Debug.Log ("angle is " + Quaternion.Angle(transform.rotation, homeRot) );
+				InstResetRotation();
+				rotReset = false;
+			}
+			transform.rotation = Quaternion.Slerp ( startResetRot, homeRot, Mathf.SmoothStep(0, 1, (Time.time - startResetRotTime) / resetDur) );
+		}
+		if (zoomReset) {
+			// TODO: this
+			if( Mathf.Abs(cam.fieldOfView - homeFOV) < camSnapMargin ){
+				InstResetZoom();
+				zoomReset = false;
+			}
+			cam.fieldOfView = Mathf.SmoothDamp(cam.fieldOfView, homeFOV, ref fovResetVel, resetDur);
+
+		}
+		if (posReset) {
+			// TODO: this
+			if( (transform.position - homePos).sqrMagnitude < camSnapMargin ){
+				InstResetPosition();
+				posReset = false;
+			}
+			transform.position = Vector3.SmoothDamp(transform.position, homePos, ref posResetVel, resetDur);
+		}
+		
+		
 	}
 
-	void ResetCameraZoom(){
-		cam.fieldOfView = baseZoomFOV;
+
+	void InstResetZoom(){
+		cam.fieldOfView = homeFOV;
+		fovResetVel = 0;
 	}
+					
+	void ResetZoom(){
+		if (!zoomReset) {
+			zoomReset = true;
+		}
+	}
+
+	void InstResetRotation(){
+		transform.rotation = homeRot;
+	}
+
+	void ResetRotation(){
+		if(!rotReset){
+			startResetRotTime	= Time.time;
+			startResetRot = transform.rotation;
+			rotReset	= true;
+		}
+	}
+
+	void InstResetPosition(){
+		transform.position = homePos;
+	}
+
+	void ResetPosition(){
+		if (!posReset) {
+			posReset	= true;
+			posResetVel	= Vector3.zero;
+		}
+	}
+
+
 
 }
