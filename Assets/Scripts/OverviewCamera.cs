@@ -19,7 +19,7 @@ public class OverviewCamera : MonoBehaviour {
 
 	public float resetDur = 0.5f;
 
-	public float baseMoveSpeed = 10f;
+	public float baseMoveSpeed = 50f;
 	public float baseHeight;
 
 	public float zoomSpeed = 360f;
@@ -53,20 +53,23 @@ public class OverviewCamera : MonoBehaviour {
 		// eventually might want additional scroll acceleration
 		// or just have scroll dependent on distance mouse is from center
 
-		// if tries to move camera during reset, abort reset
-
-		float horiz = Input.GetAxis ("Horizontal");
-		float verti = Input.GetAxis ("Vertical");
-		if(horiz != 0 || verti != 0){
-			transform.Translate ( baseMoveSpeed * Time.deltaTime * new Vector3(horiz, 0, verti), Space.World);
+		// if tries to move camera during reset, abort pos reset
+		if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
 			//Debug.Log ("camera meaningfully moved");
 			posReset = false;
 		}
-		float scroll = Input.GetAxis ("Mouse ScrollWheel");
-		if(scroll != 0){
-			cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
+
+		float horiz = Input.GetAxis ("Horizontal");
+		float verti = Input.GetAxis ("Vertical");
+		transform.Translate ( baseMoveSpeed * Time.deltaTime * new Vector3(horiz, 0, verti), Space.World);
+
+		// if tries to scroll during reset, abort zoom reset
+		if(Input.GetAxisRaw("Mouse ScrollWheel") != 0){
 			zoomReset = false;
 		}
+		float scroll = Input.GetAxis ("Mouse ScrollWheel");
+		cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
+
 		if (cam.fieldOfView < minZoomFOV)
 			cam.fieldOfView = minZoomFOV;
 		if (cam.fieldOfView > maxZoomFOV)
