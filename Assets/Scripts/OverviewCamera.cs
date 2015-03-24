@@ -47,7 +47,7 @@ public class OverviewCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Vector2 mousepos = new Vector2 (Input.mousePosition.x, Input.mousePosition.y);
+		// Vector2 mousepos = new Vector2 (Input.mousePosition.x, Input.mousePosition.y);
 
 		// hmmm how to implement? 
 		// eventually might want additional scroll acceleration
@@ -82,6 +82,26 @@ public class OverviewCamera : MonoBehaviour {
 			ResetPosition();
 		}
 
+		if (Input.GetKey(KeyCode.LeftControl) || Input.GetMouseButton(1)) {
+			Debug.Log ("Mouse looking.");
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+
+			Vector2 mouseDel = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+
+
+
+		}
+		else{
+			if(Input.GetKey (KeyCode.LeftShift)){
+				Debug.Log ("Mouse confined? What does this do exactly?");
+				Cursor.lockState = CursorLockMode.Confined;
+			}
+			else{
+				Cursor.lockState = CursorLockMode.None;
+			}
+			Cursor.visible = true;
+		}
 
 
 		if (rotReset) {
