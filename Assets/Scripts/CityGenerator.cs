@@ -42,7 +42,7 @@ public class CityGenerator : MonoBehaviour {
 
 	GameObject GenerateBuilding(Vector3 pos, Vector3 scale){
 		//Vector3 scale = newBuildingScale (pos);
-		GameObject building = (GameObject)Instantiate (buildingPrefab, pos, new Quaternion ());
+		GameObject building = (GameObject)Instantiate (buildingPrefab, transform.position + pos, new Quaternion ());
 		building.transform.localScale = scale;
 		return building;
 	}
