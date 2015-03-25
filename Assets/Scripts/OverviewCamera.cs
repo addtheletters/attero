@@ -19,7 +19,7 @@ public class OverviewCamera : MonoBehaviour {
 
 	public float resetDur = 0.5f;
 
-	public float rotSpeed = 5f;
+	public float rotSpeed = 200f;
 	public float minXAngle = 0f;
 	public float maxXAngle = 360f;
 
@@ -61,7 +61,7 @@ public class OverviewCamera : MonoBehaviour {
 
 		float horiz = Input.GetAxis ("Horizontal");
 		float verti = Input.GetAxis ("Vertical");
-		transform.Translate ( baseMoveSpeed * Time.deltaTime * (horiz * transform.right + verti * Vector3.Normalize(Vector3.ProjectOnPlane(transform.forward, Vector3.up))), Space.World);
+		transform.Translate ( baseMoveSpeed * Time.deltaTime * (horiz * Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized + verti * Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized), Space.World);
 
 		// if tries to scroll during reset, abort zoom reset
 		if(Input.GetAxisRaw("Mouse ScrollWheel") != 0){
@@ -92,7 +92,7 @@ public class OverviewCamera : MonoBehaviour {
 				rotReset = false;
 			}
 
-			Vector2 mouseDel = rotSpeed * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+			Vector2 mouseDel = rotSpeed * Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 			transform.RotateAround(transform.position, Vector3.up, mouseDel.x);
 			transform.RotateAround(transform.position, -transform.right, mouseDel.y);
 			
@@ -112,7 +112,8 @@ public class OverviewCamera : MonoBehaviour {
 
 
 		if (rotReset) {
-			// TODO: this better maybe?
+			// TODO: this better
+			// using Mathf.SmoothDampAngle
 			if( Quaternion.Angle(transform.rotation, homeRot) < camSnapMargin * 100){
 				//Debug.Log ("angle is " + Quaternion.Angle(transform.rotation, homeRot) );
 				InstResetRotation();
@@ -121,7 +122,6 @@ public class OverviewCamera : MonoBehaviour {
 			transform.rotation = Quaternion.Slerp ( startResetRot, homeRot, Mathf.SmoothStep(0, 1, (Time.time - startResetRotTime) / resetDur) );
 		}
 		if (zoomReset) {
-			// TODO: this
 			if( Mathf.Abs(cam.fieldOfView - homeFOV) < camSnapMargin ){
 				InstResetZoom();
 				zoomReset = false;
@@ -130,17 +130,18 @@ public class OverviewCamera : MonoBehaviour {
 
 		}
 		if (posReset) {
-			// TODO: this
 			if( (transform.position - homePos).sqrMagnitude < camSnapMargin ){
 				InstResetPosition();
 				posReset = false;
 			}
 			transform.position = Vector3.SmoothDamp(transform.position, homePos, ref posResetVel, resetDur);
 		}
-		
-		
 	}
 
+	public static float ClampLookAngle( float angle ){
+		// TODO this, to restrict up/down look
+		return 0f;
+	}
 
 	void InstResetZoom(){
 		cam.fieldOfView = homeFOV;
