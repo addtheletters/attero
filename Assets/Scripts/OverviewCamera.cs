@@ -1,13 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/*
- *	 Script for RTS-like camera movement, with ability
- *	 for smooth camera movements between saved camera states.
- *
- *	Look rotation currently ignores roll (z axis rotation).
- */
-// TODO implement moving the camera vertically / some unfixed standard for camera height
 public class OverviewCamera : MonoBehaviour {
 
 	public struct CamState{
@@ -33,9 +26,6 @@ public class OverviewCamera : MonoBehaviour {
 	//private float 		startChangeRotTime;
 	//private Quaternion	startChangeRot;
 
-	private float iPitch; // i for internal
-	private float iYaw;
-
 	private Vector3 posVel;
 	private Vector3 rotEulerVel;
 	private float fovVel;
@@ -43,8 +33,6 @@ public class OverviewCamera : MonoBehaviour {
 	public float changeDur = 0.5f;
 
 	public float rotSpeed = 200f;
-	public float upwardAngleCap = 85;
-	public float downwardAngleCap = 85;
 
 	public float baseMoveSpeed = 50f;
 	public float baseHeight;
@@ -70,9 +58,6 @@ public class OverviewCamera : MonoBehaviour {
 			home = CurrentCamState();
 			target = home;
 			last = home;
-
-			iPitch = home.rot.eulerAngles.x;
-			iYaw = home.rot.eulerAngles.y;
 		}
 	}
 	
@@ -106,11 +91,11 @@ public class OverviewCamera : MonoBehaviour {
 			cam.fieldOfView = maxZoomFOV;
 		
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			//Debug.Log ("Overview Cam: Resetting camera.");
+			Debug.Log ("Overview Cam: Resetting camera.");
 			ChangeCamTo(home);
 		}
 		if (Input.GetKeyDown (KeyCode.Backspace)) {
-			//Debug.Log("Overview Cam: Moving camera back to previous state.");
+			Debug.Log("Overview Cam: Moving camera back to previous state.");
 			ChangeCamTo(last);
 		}
 		
@@ -125,15 +110,8 @@ public class OverviewCamera : MonoBehaviour {
 			}
 			
 			Vector2 mouseDel = rotSpeed * Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-			iPitch	-= mouseDel.y;
-			iYaw 	+= mouseDel.x;
-			ClampLookAngle();
-			transform.rotation = FromFPSLook(iPitch, iYaw);
-			//transform.Rotate(Vector3.up, mouseDel.x, Space.World);
-			//transform.Rotate(-transform.right, mouseDel.y, Space.World);
-
-			// TODO clamp
-			//transform.rotation =  //Quaternion.Euler( Mathf.Clamp ( transform.rotation.eulerAngles.x, -upwardAngleCap , downwardAngleCap), transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z); ;
+			transform.RotateAround(transform.position, Vector3.up, mouseDel.x);
+			transform.RotateAround(transform.position, -transform.right, mouseDel.y);
 		}
 		else{
 			if(Input.GetKey (KeyCode.LeftShift)){
@@ -151,17 +129,12 @@ public class OverviewCamera : MonoBehaviour {
 	private void UpdateCameraPos(){
 		if (rotChange) {
 			if( Quaternion.Angle(transform.rotation, target.rot) < camSnapMargin * 100){
-				InstChangeRotation(target.rot.eulerAngles.x, target.rot.eulerAngles.y);
+				InstChangeRotation(target.rot);
 				rotChange = false;
 			}
-			iPitch	= Mathf.SmoothDamp(iPitch,	target.rot.eulerAngles.x, ref rotEulerVel.x, changeDur);
-			iYaw	= Mathf.SmoothDamp(iYaw,	target.rot.eulerAngles.y, ref rotEulerVel.y, changeDur);
-			transform.rotation = FromFPSLook(iPitch, iYaw);
-			/*
 			transform.rotation = Quaternion.Euler (Mathf.SmoothDampAngle(transform.rotation.eulerAngles.x, target.rot.eulerAngles.x, ref rotEulerVel.x, changeDur),
 			                                       Mathf.SmoothDampAngle(transform.rotation.eulerAngles.y, target.rot.eulerAngles.y, ref rotEulerVel.y, changeDur),
 			                                       Mathf.SmoothDampAngle(transform.rotation.eulerAngles.z, target.rot.eulerAngles.z, ref rotEulerVel.z, changeDur));//Quaternion.Lerp ( startChangeRot, target.rot, Mathf.SmoothStep(0, 1, (Time.time - startChangeRotTime) / changeDur) );
-			*/
 		}
 		if (zoomChange) {
 			if( Mathf.Abs(cam.fieldOfView - target.fov) < camSnapMargin ){
@@ -198,21 +171,16 @@ public class OverviewCamera : MonoBehaviour {
 		return state;
 	}
 
-	private void ClampLookAngle (){
-		bool zFlip = Mathf.Approximately(transform.rotation.eulerAngles.z, 180);
-		if (zFlip) {
+	public static float ClampLookAngle( float angle ){
+		// TODO this, to restrict up/down look
 
-		}
+		return angle;
 	}
 
-	private Quaternion FromFPSLook(float pitch, float yaw){
-		return Quaternion.Euler (pitch, yaw, 0);
-	}
-	
 	public void ChangeCamTo(CamState state){
 		last = DesiredCamState();
 		ChangeZoomTo (state.fov);
-		ChangeRotationTo (state.rot.eulerAngles.x, state.rot.eulerAngles.y);
+		ChangeRotationTo (state.rot);
 		ChangePositionTo (state.pos);
 	}
 
@@ -235,13 +203,12 @@ public class OverviewCamera : MonoBehaviour {
 		}
 	}
 
-	private void InstChangeRotation( float pitch, float yaw ){
-		transform.rotation = FromFPSLook (pitch, yaw);
-
+	private void InstChangeRotation( Quaternion rot ){
+		transform.rotation = rot;
 	}
 
-	private void ChangeRotationTo( float pitch, float yaw ){
-		target.rot = FromFPSLook(pitch, yaw);
+	private void ChangeRotationTo( Quaternion rot ){
+		target.rot = rot;
 		if(!rotChange){
 			//startChangeRotTime	= Time.time;
 			//startChangeRot = transform.rotation;
