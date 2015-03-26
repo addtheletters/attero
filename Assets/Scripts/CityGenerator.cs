@@ -33,7 +33,7 @@ public class CityGenerator : MonoBehaviour {
 					buildings.Add (b);
 				}
 				else{
-					Debug.Log("CityGenerator: building too short at (" + x + "," + z + ") with height " + scale.y);
+					//Debug.Log("CityGenerator: building too short at (" + x + "," + z + ") with height " + scale.y);
 				}
 			}
 		}

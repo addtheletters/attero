@@ -8,7 +8,7 @@ public abstract class GunControl : MonoBehaviour {
 	protected void Start(){
 		theGun = GetComponent<Gun> ();
 		if (!theGun) {
-			Debug.Log("GunControl: no gun");
+			Debug.Log("GunControl: no gun on object " + this.gameObject);
 		}
 	}
 

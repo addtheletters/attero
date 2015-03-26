@@ -177,6 +177,9 @@ public class GunEmplacement : AutoGunControl {
 	}
 
 	bool TargetInRange( ILeadable target ){
+		if (target == null) {
+			return false; // this behavior may change
+		}
 		return (target.getPosition () - transform.position).sqrMagnitude < (range * range); 
 	}
 
