@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ *	 Script for RTS-like camera movement, with ability
+ *	 for smooth camera movements between saved camera states.
+ *
+ *	Look rotation currently ignores roll (z axis rotation).
+ */
+// TODO implement moving the camera vertically / some unfixed standard for camera height
 public class OverviewCamera : MonoBehaviour {
 
 	public struct CamState{
@@ -69,33 +76,32 @@ public class OverviewCamera : MonoBehaviour {
 
 	private void UseCameraInput(){
 		// Vector2 mousepos = new Vector2 (Input.mousePosition.x, Input.mousePosition.y);
-		
+
+		float horiz = Input.GetAxis ("Horizontal");
+		float verti = Input.GetAxis ("Vertical");
+		transform.Translate ( baseMoveSpeed * Time.deltaTime * (horiz * Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized + verti * Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized), Space.World);
 		// if tries to move camera during reset, abort pos reset
 		if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
 			posChange = false;
 		}
-		float horiz = Input.GetAxis ("Horizontal");
-		float verti = Input.GetAxis ("Vertical");
-		transform.Translate ( baseMoveSpeed * Time.deltaTime * (horiz * Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized + verti * Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized), Space.World);
 		
+		float scroll = Input.GetAxis ("Mouse ScrollWheel");
+		cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
 		// if tries to scroll during reset, abort zoom reset
 		if(Input.GetAxisRaw("Mouse ScrollWheel") != 0){
 			zoomChange = false;
 		}
-		float scroll = Input.GetAxis ("Mouse ScrollWheel");
-		cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
-		
 		if (cam.fieldOfView < minZoomFOV)
 			cam.fieldOfView = minZoomFOV;
 		if (cam.fieldOfView > maxZoomFOV)
 			cam.fieldOfView = maxZoomFOV;
 		
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			Debug.Log ("Overview Cam: Resetting camera.");
+			//Debug.Log ("Overview Cam: Resetting camera.");
 			ChangeCamTo(home);
 		}
 		if (Input.GetKeyDown (KeyCode.Backspace)) {
-			Debug.Log("Overview Cam: Moving camera back to previous state.");
+			//Debug.Log("Overview Cam: Moving camera back to previous state.");
 			ChangeCamTo(last);
 		}
 		
@@ -104,14 +110,17 @@ public class OverviewCamera : MonoBehaviour {
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			
+			Vector2 mouseDel = rotSpeed * Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+			transform.RotateAround(transform.position, Vector3.up, mouseDel.x);
+			transform.RotateAround(transform.position, -transform.right, mouseDel.y);
+
 			// if user is doing rot inputs, cancel rotation movements
 			if(Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0){
 				rotChange = false;
 			}
-			
-			Vector2 mouseDel = rotSpeed * Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-			transform.RotateAround(transform.position, Vector3.up, mouseDel.x);
-			transform.RotateAround(transform.position, -transform.right, mouseDel.y);
+			if(!rotChange){ // if being auto-rotated, do not worry about clamp
+				ClampLookAngle();
+			}
 		}
 		else{
 			if(Input.GetKey (KeyCode.LeftShift)){
@@ -171,10 +180,17 @@ public class OverviewCamera : MonoBehaviour {
 		return state;
 	}
 
-	public static float ClampLookAngle( float angle ){
-		// TODO this, to restrict up/down look
+	private void ClampLookAngle (){
+		// TODO this
+		Vector3 tempEuler = transform.rotation.eulerAngles;
+		bool zFlip = Mathf.Approximately(tempEuler.z, 180);
+		if (!zFlip) {
+			//tempEuler.y += 180;
+			if(tempEuler.x > 0 && tempEuler.x < 180){
 
-		return angle;
+			}
+		}
+
 	}
 
 	public void ChangeCamTo(CamState state){
