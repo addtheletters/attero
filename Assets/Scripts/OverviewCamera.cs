@@ -30,12 +30,11 @@ public class OverviewCamera : MonoBehaviour {
 	public bool zoomChange	= false;
 	public bool posChange	= false;
 
-	//private float 		startChangeRotTime;
-	//private Quaternion	startChangeRot;
-
 	private Vector3 posVel;
 	private Vector3 rotEulerVel;
 	private float fovVel;
+
+	private float clampXVel;
 
 	public float changeDur = 0.5f;
 
@@ -79,14 +78,36 @@ public class OverviewCamera : MonoBehaviour {
 
 		float horiz = Input.GetAxis ("Horizontal");
 		float verti = Input.GetAxis ("Vertical");
-		transform.Translate ( baseMoveSpeed * Time.deltaTime * (horiz * Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized + verti * Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized), Space.World);
+		if( horiz != 0 || verti != 0){
+			Vector3 transVec = horiz * Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized;
+			if(Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.x, 0)) < 1){
+				// angle is close to horizontal
+				Debug.Log ("translating while looking horizontal!" + Time.timeSinceLevelLoad);
+				transVec += verti * Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+			}
+			else if(CamLookingDown()){
+				// looking downward
+				Debug.Log("translating while looking down! " + Time.timeSinceLevelLoad + transform.up + Vector3.ProjectOnPlane(transform.up, Vector3.up).normalized);
+				transVec += verti * Vector3.ProjectOnPlane(transform.up, Vector3.up).normalized;
+			}
+			else{
+				// looking upward
+				Debug.Log ("translating while looking up! " + Time.timeSinceLevelLoad);
+				transVec += verti * Vector3.ProjectOnPlane(-transform.up, Vector3.up).normalized;
+			}
+			transform.Translate ( baseMoveSpeed * Time.deltaTime * transVec, Space.World);
+
+		}
 		// if tries to move camera during reset, abort pos reset
 		if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
 			posChange = false;
 		}
 		
 		float scroll = Input.GetAxis ("Mouse ScrollWheel");
-		cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
+		if( scroll != 0 ){
+			cam.fieldOfView -= scroll * zoomSpeed * Time.deltaTime;
+		}
+
 		// if tries to scroll during reset, abort zoom reset
 		if(Input.GetAxisRaw("Mouse ScrollWheel") != 0){
 			zoomChange = false;
@@ -118,11 +139,12 @@ public class OverviewCamera : MonoBehaviour {
 			if(Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0){
 				rotChange = false;
 			}
-			if(!rotChange){ // if being auto-rotated, do not worry about clamp
-				ClampLookAngle();
-			}
+
 		}
 		else{
+			if(!rotChange){ // if being auto-rotated or manual, do not worry about clamp
+				ClampLookAngle();
+			}
 			if(Input.GetKey (KeyCode.LeftShift)){
 				// TODO: make holding shift allow you to pan by moving mouse to edges, Starcraft style	
 				//Debug.Log ("Mouse confined? What does this do exactly?");
@@ -180,17 +202,51 @@ public class OverviewCamera : MonoBehaviour {
 		return state;
 	}
 
+	/*
 	private void ClampLookAngle (){
-		// TODO this
-		Vector3 tempEuler = transform.rotation.eulerAngles;
-		bool zFlip = Mathf.Approximately(tempEuler.z, 180);
-		if (!zFlip) {
-			//tempEuler.y += 180;
-			if(tempEuler.x > 0 && tempEuler.x < 180){
-
+		Vector3 startEuler = transform.rotation.eulerAngles;
+		Vector3 adjustedEuler = startEuler;
+		bool zNormal	= Mathf.Abs(startEuler.z) < 5;
+		bool zFlip		= Mathf.Approximately (startEuler.z, 180);
+		startEuler.x = startEuler.x % 360; // just making sure
+		if (zNormal) {
+			Debug.Log ("Z is normal");
+			if(startEuler.x >= 270){
+				// looking above the horizon
+				Debug.Log("Above horizon, Trying to clamp xlook between 275 and inf");
+				adjustedEuler.x = Mathf.Clamp(startEuler.x, 265, Mathf.Infinity);
+			}
+			else if(startEuler.x <= 90){
+				// looking below the horizon
+				Debug.Log("Below horizon, Trying to clamp xlook between -inf and 85");
+				adjustedEuler.x = Mathf.Clamp (startEuler.x, Mathf.NegativeInfinity, 85);
+			}
+			else{
+				// should not happen, implies looking upsidedown/backwards (as if zFlip were true)
 			}
 		}
+		else{
+			Debug.Log ("Z is not normal");
+		}
 
+		transform.rotation = Quaternion.Euler (adjustedEuler);
+	}*/
+
+	private void ClampLookAngle(){
+		if (Mathf.Abs(Mathf.DeltaAngle(transform.rotation.eulerAngles.z, 180)) < 1) {
+			Vector3 tmpEuler = transform.rotation.eulerAngles;
+			if(tmpEuler.x < 180){
+				tmpEuler.x = Mathf.SmoothDampAngle(transform.rotation.eulerAngles.x, 90, ref clampXVel, .1f);
+			}
+			else{
+				tmpEuler.x = Mathf.SmoothDampAngle(transform.rotation.eulerAngles.x, 270, ref clampXVel, .1f);
+			}
+			transform.rotation = Quaternion.Euler(tmpEuler);
+		}
+	}
+
+	private bool CamLookingDown(){
+		return Vector3.Angle( cam.transform.forward, Vector3.down ) < Vector3.Angle(cam.transform.forward, Vector3.up); 
 	}
 
 	public void ChangeCamTo(CamState state){
@@ -226,8 +282,6 @@ public class OverviewCamera : MonoBehaviour {
 	private void ChangeRotationTo( Quaternion rot ){
 		target.rot = rot;
 		if(!rotChange){
-			//startChangeRotTime	= Time.time;
-			//startChangeRot = transform.rotation;
 			rotChange	= true;
 			rotEulerVel = Vector3.zero;
 		}
