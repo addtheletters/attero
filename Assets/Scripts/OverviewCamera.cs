@@ -82,17 +82,17 @@ public class OverviewCamera : MonoBehaviour {
 			Vector3 transVec = horiz * Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized;
 			if(Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.x, 0)) < 1){
 				// angle is close to horizontal
-				Debug.Log ("translating while looking horizontal!" + Time.timeSinceLevelLoad);
+				//Debug.Log ("translating while looking horizontal!" + Time.timeSinceLevelLoad);
 				transVec += verti * Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
 			}
 			else if(CamLookingDown()){
 				// looking downward
-				Debug.Log("translating while looking down! " + Time.timeSinceLevelLoad + transform.up + Vector3.ProjectOnPlane(transform.up, Vector3.up).normalized);
+				//Debug.Log("translating while looking down! " + Time.timeSinceLevelLoad + transform.up + Vector3.ProjectOnPlane(transform.up, Vector3.up).normalized);
 				transVec += verti * Vector3.ProjectOnPlane(transform.up, Vector3.up).normalized;
 			}
 			else{
 				// looking upward
-				Debug.Log ("translating while looking up! " + Time.timeSinceLevelLoad);
+				//Debug.Log ("translating while looking up! " + Time.timeSinceLevelLoad);
 				transVec += verti * Vector3.ProjectOnPlane(-transform.up, Vector3.up).normalized;
 			}
 			transform.Translate ( baseMoveSpeed * Time.deltaTime * transVec, Space.World);
