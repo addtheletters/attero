@@ -163,6 +163,7 @@ public class OverviewCamera : MonoBehaviour {
 				InstChangeRotation(target.rot);
 				rotChange = false;
 			}
+			// TODO make this not break when looking vertically (change to use a Mathf.SmoothDamp along with Quaternion.Slerp)
 			transform.rotation = Quaternion.Euler (Mathf.SmoothDampAngle(transform.rotation.eulerAngles.x, target.rot.eulerAngles.x, ref rotEulerVel.x, changeDur),
 			                                       Mathf.SmoothDampAngle(transform.rotation.eulerAngles.y, target.rot.eulerAngles.y, ref rotEulerVel.y, changeDur),
 			                                       Mathf.SmoothDampAngle(transform.rotation.eulerAngles.z, target.rot.eulerAngles.z, ref rotEulerVel.z, changeDur));//Quaternion.Lerp ( startChangeRot, target.rot, Mathf.SmoothStep(0, 1, (Time.time - startChangeRotTime) / changeDur) );
