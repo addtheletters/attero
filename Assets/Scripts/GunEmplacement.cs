@@ -30,7 +30,7 @@ public class GunEmplacement : AutoGunControl {
 
 	new void Start(){
 		base.Start ();
-		obscurementMask = 1 << LayerMask.NameToLayer("Obscurement"); // obscurement layer
+		obscurementMask = (1 << LayerMask.NameToLayer("Obscurement")) | (1 << LayerMask.NameToLayer("Ground")); // obscurement layer
 	}
 
 	// Update is called once per frame
@@ -169,7 +169,7 @@ public class GunEmplacement : AutoGunControl {
 	bool ViewToObstructed(ILeadable target){
 		RaycastHit hit;
 		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, obscurementMask);
-		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
+		Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
 		if (castResult) {
 			//Debug.Log(hit.collider.gameObject);
 		}
