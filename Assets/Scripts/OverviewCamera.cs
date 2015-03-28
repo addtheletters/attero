@@ -31,7 +31,9 @@ public class OverviewCamera : MonoBehaviour {
 	public bool posChange	= false;
 
 	private Vector3 posVel;
-	private Vector3 rotEulerVel;
+	//private Vector3 rotEulerVel;
+	private float rotProgress;
+	private float rotVel;
 	private float fovVel;
 
 	private float clampXVel;
@@ -163,10 +165,8 @@ public class OverviewCamera : MonoBehaviour {
 				InstChangeRotation(target.rot);
 				rotChange = false;
 			}
-			// TODO make this not break when looking vertically (change to use a Mathf.SmoothDamp along with Quaternion.Slerp)
-			transform.rotation = Quaternion.Euler (Mathf.SmoothDampAngle(transform.rotation.eulerAngles.x, target.rot.eulerAngles.x, ref rotEulerVel.x, changeDur),
-			                                       Mathf.SmoothDampAngle(transform.rotation.eulerAngles.y, target.rot.eulerAngles.y, ref rotEulerVel.y, changeDur),
-			                                       Mathf.SmoothDampAngle(transform.rotation.eulerAngles.z, target.rot.eulerAngles.z, ref rotEulerVel.z, changeDur));//Quaternion.Lerp ( startChangeRot, target.rot, Mathf.SmoothStep(0, 1, (Time.time - startChangeRotTime) / changeDur) );
+			rotProgress = Mathf.SmoothDamp(rotProgress, 1, ref rotVel, changeDur);
+			transform.rotation = Quaternion.Slerp (last.rot, target.rot, rotProgress);
 		}
 		if (zoomChange) {
 			if( Mathf.Abs(cam.fieldOfView - target.fov) < camSnapMargin ){
@@ -282,9 +282,11 @@ public class OverviewCamera : MonoBehaviour {
 
 	private void ChangeRotationTo( Quaternion rot ){
 		target.rot = rot;
+		rotProgress = 0;
 		if(!rotChange){
 			rotChange	= true;
-			rotEulerVel = Vector3.zero;
+			rotVel 		= 0;
+			//rotEulerVel = Vector3.zero;
 		}
 	}
 
