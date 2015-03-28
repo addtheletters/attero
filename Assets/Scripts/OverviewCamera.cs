@@ -32,6 +32,7 @@ public class OverviewCamera : MonoBehaviour {
 
 	private Vector3 posVel;
 	//private Vector3 rotEulerVel;
+	private Quaternion initRotChange;
 	private float rotProgress;
 	private float rotVel;
 	private float fovVel;
@@ -166,7 +167,7 @@ public class OverviewCamera : MonoBehaviour {
 				rotChange = false;
 			}
 			rotProgress = Mathf.SmoothDamp(rotProgress, 1, ref rotVel, changeDur);
-			transform.rotation = Quaternion.Slerp (last.rot, target.rot, rotProgress);
+			transform.rotation = Quaternion.Slerp (initRotChange, target.rot, rotProgress);
 		}
 		if (zoomChange) {
 			if( Mathf.Abs(cam.fieldOfView - target.fov) < camSnapMargin ){
@@ -202,36 +203,6 @@ public class OverviewCamera : MonoBehaviour {
 		}
 		return state;
 	}
-
-	/*
-	private void ClampLookAngle (){
-		Vector3 startEuler = transform.rotation.eulerAngles;
-		Vector3 adjustedEuler = startEuler;
-		bool zNormal	= Mathf.Abs(startEuler.z) < 5;
-		bool zFlip		= Mathf.Approximately (startEuler.z, 180);
-		startEuler.x = startEuler.x % 360; // just making sure
-		if (zNormal) {
-			Debug.Log ("Z is normal");
-			if(startEuler.x >= 270){
-				// looking above the horizon
-				Debug.Log("Above horizon, Trying to clamp xlook between 275 and inf");
-				adjustedEuler.x = Mathf.Clamp(startEuler.x, 265, Mathf.Infinity);
-			}
-			else if(startEuler.x <= 90){
-				// looking below the horizon
-				Debug.Log("Below horizon, Trying to clamp xlook between -inf and 85");
-				adjustedEuler.x = Mathf.Clamp (startEuler.x, Mathf.NegativeInfinity, 85);
-			}
-			else{
-				// should not happen, implies looking upsidedown/backwards (as if zFlip were true)
-			}
-		}
-		else{
-			Debug.Log ("Z is not normal");
-		}
-
-		transform.rotation = Quaternion.Euler (adjustedEuler);
-	}*/
 
 	private void ClampLookAngle(){
 		if (Mathf.Abs(Mathf.DeltaAngle(transform.rotation.eulerAngles.z, 180)) < 1) {
@@ -282,6 +253,7 @@ public class OverviewCamera : MonoBehaviour {
 
 	private void ChangeRotationTo( Quaternion rot ){
 		target.rot = rot;
+		initRotChange = transform.rotation;
 		rotProgress = 0;
 		if(!rotChange){
 			rotChange	= true;
