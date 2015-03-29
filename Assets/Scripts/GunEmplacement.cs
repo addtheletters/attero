@@ -169,7 +169,7 @@ public class GunEmplacement : AutoGunControl {
 	bool ViewToObstructed(ILeadable target){
 		RaycastHit hit;
 		bool castResult = Physics.Raycast (transform.position, target.getPosition() - transform.position, out hit, range, obscurementMask);
-		Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
+		//Debug.Log ("GunEmplacement: cast to target status is " + !castResult);
 		if (castResult) {
 			//Debug.Log(hit.collider.gameObject);
 		}
@@ -184,12 +184,12 @@ public class GunEmplacement : AutoGunControl {
 	}
 
 	public override void Shoot(){
-		//theGun.FireAt(currentTarget.getPosition());
+		//gun.FireAt(currentTarget.getPosition());
 		//DebugShowLead (currentTarget);
-		theGun.FireAt (LeadPosition(currentTarget));
+		gun.FireAt (LeadPosition(currentTarget));
 	}
 
-	public override bool shouldFire(){
+	public override bool ShouldFire(){
 		return targetFound && TargetInSight(currentTarget);
 	}
 

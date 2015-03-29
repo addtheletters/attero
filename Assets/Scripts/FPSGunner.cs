@@ -15,8 +15,8 @@ public class FPSGunner : AutoGunControl {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		//Screen.lockCursor = true;
-		/*theGun = GetComponent<Gun>();
-		if (!theGun) {
+		/*gun = GetComponent<Gun>();
+		if (!gun) {
 			Debug.Log ("FPSGunner: no gun found");
 		}*/
 	}
@@ -33,11 +33,11 @@ public class FPSGunner : AutoGunControl {
 		}
 	}
 
-	public override bool shouldFire(){
+	public override bool ShouldFire(){
 		return Input.GetButton ("Fire1");
 	}
 
 	public override void Shoot(){
-		theGun.Fire (cam.transform.forward);
+		gun.Fire (cam.transform.forward);
 	}
 }

@@ -3,29 +3,29 @@ using System.Collections;
 
 public abstract class GunControl : MonoBehaviour {
 
-	protected Gun theGun;
+	protected Gun gun;
 
 	protected void Start(){
-		theGun = GetComponent<Gun> ();
-		if (!theGun) {
+		gun = GetComponent<Gun> ();
+		if (!gun) {
 			Debug.Log("GunControl: no gun on object " + this.gameObject);
 		}
 	}
 
 	protected void Update(){
-		if (shouldFire()) {
+		if (ShouldFire()) {
 			Shoot();
 		}
 	}
 
 	public abstract void Shoot ();
-		//theGun.FireAt(target);
+		//gun.FireAt(target);
 
-	public abstract bool shouldFire ();
+	public abstract bool ShouldFire ();
 		//return (bool)target;
 
 	public float TimeToImpact( Vector3 target ){
-		return (target - transform.position).sqrMagnitude / theGun.muzzleVel; // badly underapproximation, need to count drag and gravity, return negatives if target unreachable?
+		return (target - transform.position).sqrMagnitude / gun.muzzleVel; // badly underapproximation, need to count drag and gravity, return negatives if target unreachable?
 	}
 
 	// another function stating aim needed to hit the target, counting drag and gravity (math)

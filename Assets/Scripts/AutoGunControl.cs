@@ -9,14 +9,14 @@ public abstract class AutoGunControl : GunControl {
 	protected float lastShotTime;
 
 	protected new void Update () {
-		if (shouldAutoFire ()) {
+		if (ShouldAutoFire ()) {
 			Shoot();
 			lastShotTime = Time.time;
 		}
 	}
 
-	public virtual bool shouldAutoFire(){
-		return (shouldFire () && ((Time.time - lastShotTime) > shotDelay));
+	public virtual bool ShouldAutoFire(){
+		return (ShouldFire () && ((Time.time - lastShotTime) > shotDelay));
 	}
 
 	public static float CalcShotDelay(float roundsPerMinute){
