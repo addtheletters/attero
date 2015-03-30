@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /*
  *	 Script for RTS-like camera movement, with ability
@@ -10,6 +11,7 @@ using System.Collections;
 // TODO implement moving the camera vertically / some unfixed standard for camera height
 public class OverviewCamera : MonoBehaviour {
 
+	[Serializable]
 	public struct CamState{
 		public float fov;
 		public Quaternion rot;
@@ -22,9 +24,9 @@ public class OverviewCamera : MonoBehaviour {
 		}
 	}
 
-	private CamState home;
-	private CamState target;
-	private CamState last;
+	public CamState home;
+	public CamState target;
+	public CamState last;
 
 	public bool rotChange	= false; // auto-changing state
 	public bool zoomChange	= false;
