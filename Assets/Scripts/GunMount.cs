@@ -132,6 +132,8 @@ public class GunMount : MonoBehaviour {
 			// low priority, this TODO will probably just get removed
 			// but let's get it in the git
 
+			// TODO actually stop the thing from rotating through impossible angles
+
 			MoveAimTowards(targetAim);
 			Debug.Log ("reaiming");
 			if( currentAim.IsApproximately( targetAim ) ){

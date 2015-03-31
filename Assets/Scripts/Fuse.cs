@@ -11,6 +11,7 @@ public abstract class Fuse : MonoBehaviour {
 	// DONE Time: detonates after a time has passed
 	// -Contact / Percussion: detonates upon impact
 	// -Proximity / Radar: detonates when near something or about to hit something (IRL, momentum carries fragments forward to deal damage)
+	// 		-capsule cast along the velocity vector
 	// -maybe Altitide: detonates when shell reaches a certain height
 	// because some shells were set to airburst x meters above the ground
 	// -maybe Distance: detonates when shell has travelled x meters
