@@ -53,7 +53,7 @@ public class GunMount : MonoBehaviour {
 		}
 
 		public bool IsWithin(HorizontalCoords min, HorizontalCoords max){
-			return this.Altitude > min.Altitude && this.Altitude < max.Altitude && this.Azimuth > min.Azimuth && this.Azimuth < max.Azimuth;
+			return this.Altitude >= min.Altitude && this.Altitude <= max.Altitude && this.Azimuth >= min.Azimuth && this.Azimuth <= max.Azimuth;
 		}
 
 		public static bool operator ==(HorizontalCoords a, HorizontalCoords b){
@@ -132,7 +132,7 @@ public class GunMount : MonoBehaviour {
 		//return aimPoint.IsWithin(new HorizontalCoords(-maxAzimuthVariance, -maxDepression), new HorizontalCoords(maxAzimuthVariance, maxElevation));
 		float tAlt = aimPoint.Altitude;
 		float tAzi = aimPoint.Azimuth;
-		return tAlt > -maxDepression && tAlt < maxElevation && tAzi > -maxAzimuthVariance && tAzi < maxAzimuthVariance;
+		return tAlt >= -maxDepression && tAlt <= maxElevation && tAzi >= -maxAzimuthVariance && tAzi <= maxAzimuthVariance;
 	}
 
 	// get the closest horizontal coords this mount can achieve to aimPoint
