@@ -123,6 +123,15 @@ public class GunMount : MonoBehaviour {
 	void Update () {
 		ShowDebugAimline();
 		if(aiming){
+			// TODO introduce coroutine such that if tries to aim at something
+			// for a long time and fails, assumes cannot reach target
+			// or re-checks if can actually point at target
+
+			// this should not happen if SetAimTarget function is used properly
+			// but when messing about in the editor who knows
+			// low priority, this TODO will probably just get removed
+			// but let's get it in the git
+
 			MoveAimTowards(targetAim);
 			Debug.Log ("reaiming");
 			if( currentAim.IsApproximately( targetAim ) ){
@@ -145,8 +154,10 @@ public class GunMount : MonoBehaviour {
 		Debug.Log ("Moving aim towards " + aimPoint);
 		aimPoint = CloseAsPossibleTo(aimPoint);
 		Debug.Log ("Closest Aimpoint is " + aimPoint);
-		currentAim.Azimuth = Mathf.MoveTowardsAngle(currentAim.Azimuth, aimPoint.Azimuth, traverse.Azimuth * Time.deltaTime);
-		currentAim.Altitude = Mathf.MoveTowardsAngle(currentAim.Altitude, aimPoint.Altitude, traverse.Altitude * Time.deltaTime);
+		// because of the structure of HorizontalCoords, not using MoveTowardsAngle should
+		// mean this works better here (doesn't turn through impossible angles to reach target angle)
+		currentAim.Azimuth = Mathf.MoveTowards(currentAim.Azimuth, aimPoint.Azimuth, traverse.Azimuth * Time.deltaTime);
+		currentAim.Altitude = Mathf.MoveTowards(currentAim.Altitude, aimPoint.Altitude, traverse.Altitude * Time.deltaTime);
 	}
 
 	// is the gun currently aimed in aimPoint?
