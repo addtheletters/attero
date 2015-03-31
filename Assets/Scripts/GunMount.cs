@@ -27,6 +27,7 @@ public class GunMount : MonoBehaviour {
 			return simpliflied;
 		}
 
+
 		public float Azimuth{
 			get{
 				return SimplifyAngle(this.azi);
@@ -54,6 +55,23 @@ public class GunMount : MonoBehaviour {
 		public static bool operator ==(HorizontalCoords a, HorizontalCoords b){
 			return a.Altitude == b.Altitude && a.Azimuth == b.Azimuth;
 		}
+
+		public static bool operator !=(HorizontalCoords a, HorizontalCoords b){
+			return a.Altitude != b.Altitude || a.Azimuth != b.Azimuth;
+		}
+
+		public override bool Equals(object obj){
+			return this == (HorizontalCoords)obj;
+		}
+
+		public override int GetHashCode() {
+			return (azi.GetHashCode() + alt).GetHashCode(); // totally not ripped from a certain complex number struct
+		}
+
+		public bool IsWithin(HorizontalCoords min, HorizontalCoords max){
+			return this.Altitude > min.Altitude && this.Altitude < max.Altitude && this.Azimuth > min.Azimuth && this.Azimuth < max.Azimuth;
+		}
+
 	}
 
 	// gun aim speed
@@ -97,22 +115,25 @@ public class GunMount : MonoBehaviour {
 	}
 
 	void MoveAimTowards(HorizontalCoords aimPoint){
-
+		// TODO this
 	}
 
 	// is the gun currently aimed in aimPoint?
 	bool IsPointedIn(HorizontalCoords aimPoint){
-		return false;
+		return currentAim == aimPoint;
 	}
 
 	// is it possible for the gun to be aimed in aimPoint?
 	bool CanPointIn(HorizontalCoords aimPoint){
-		return false;
+		//return aimPoint.IsWithin(new HorizontalCoords(-maxAzimuthVariance, -maxDepression), new HorizontalCoords(maxAzimuthVariance, maxElevation));
+		float tAlt = aimPoint.Altitude;
+		float tAzi = aimPoint.Azimuth;
+		return tAlt > -maxDepression && tAlt < maxElevation && tAzi > -maxAzimuthVariance && tAzi < maxAzimuthVariance;
 	}
 
 	// get the closest horizontal coords this mount can achieve to aimPoint
 	HorizontalCoords CloseAsPossibleTo(HorizontalCoords aimPoint){
-
+		return new HorizontalCoords( Mathf.Clamp(aimPoint.Azimuth, -maxAzimuthVariance, maxAzimuthVariance), Mathf.Clamp(aimPoint.Altitude, -maxDepression, maxElevation) );
 	}
 
 	// mount will try to orient in aimPoint
