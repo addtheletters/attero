@@ -52,6 +52,10 @@ public class GunMount : MonoBehaviour {
 			}
 		}
 
+		public bool IsWithin(HorizontalCoords min, HorizontalCoords max){
+			return this.Altitude > min.Altitude && this.Altitude < max.Altitude && this.Azimuth > min.Azimuth && this.Azimuth < max.Azimuth;
+		}
+
 		public static bool operator ==(HorizontalCoords a, HorizontalCoords b){
 			return a.Altitude == b.Altitude && a.Azimuth == b.Azimuth;
 		}
@@ -68,8 +72,9 @@ public class GunMount : MonoBehaviour {
 			return (azi.GetHashCode() + alt).GetHashCode(); // totally not ripped from a certain complex number struct
 		}
 
-		public bool IsWithin(HorizontalCoords min, HorizontalCoords max){
-			return this.Altitude > min.Altitude && this.Altitude < max.Altitude && this.Azimuth > min.Azimuth && this.Azimuth < max.Azimuth;
+		public override string ToString ()
+		{
+			return string.Format ("[HorizontalCoords: Azimuth={0}, Altitude={1}, euler={2}]", Azimuth, Altitude, euler);
 		}
 
 	}
@@ -106,16 +111,15 @@ public class GunMount : MonoBehaviour {
 	void Update () {
 		if(aiming){
 			MoveAimTowards(targetAim);
-			/*
-			currentAim.azi = Mathf.MoveTowardsAngle(currentAim.azi, targetAim.azi, traverse.azi * Time.deltaTime);
-			currentAim.alt = Mathf.MoveTowardsAngle(currentAim.alt, targetAim.alt, traverse.alt * Time.deltaTime);
-			*/
-
+			if( IsPointedIn(targetAim) ){
+				aiming = false;
+			}
 		}
 	}
 
 	void MoveAimTowards(HorizontalCoords aimPoint){
-		// TODO this
+		currentAim.Azimuth = Mathf.MoveTowardsAngle(currentAim.Azimuth, targetAim.Azimuth, traverse.Azimuth * Time.deltaTime);
+		currentAim.Altitude = Mathf.MoveTowardsAngle(currentAim.Altitude, targetAim.Altitude, traverse.Altitude * Time.deltaTime);
 	}
 
 	// is the gun currently aimed in aimPoint?
@@ -137,8 +141,17 @@ public class GunMount : MonoBehaviour {
 	}
 
 	// mount will try to orient in aimPoint
-	void SetAimTarget(HorizontalCoords aimPoint){
-		targetAim = aimPoint;
+	bool SetAimTarget(HorizontalCoords aimPoint){
+		bool viable = CanPointIn(aimPoint);
+		if(viable){
+			targetAim = aimPoint;
+			Debug.Log ("GunMount: Set aim target successfully to " + targetAim);
+		}
+		else{
+			targetAim = CloseAsPossibleTo(aimPoint);
+			Debug.Log ("GunMount: Set aim target to closest possible, " + targetAim);
+		}
 		aiming = true;
+		return viable;
 	}
 }
