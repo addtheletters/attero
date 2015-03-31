@@ -6,6 +6,9 @@ public class GunMount : MonoBehaviour {
 
 	[Serializable]
 	public struct HorizontalCoords{
+
+		private static readonly float FLOAT_TOLERANCE = 0.001f;
+
 		[SerializeField]
 		private float azi; // horizontal angular shift, from north towards the east
 		[SerializeField]
@@ -24,13 +27,14 @@ public class GunMount : MonoBehaviour {
 			if(simpliflied > 180){
 				simpliflied = simpliflied - 360;
 			}
+			Debug.Log (angle + " simplified is " + simpliflied);
 			return simpliflied;
 		}
 
 
 		public float Azimuth{
 			get{
-				return SimplifyAngle(this.azi);
+				return this.azi;
 			}
 			set{
 				this.azi = SimplifyAngle(value);
@@ -39,21 +43,29 @@ public class GunMount : MonoBehaviour {
 
 		public float Altitude{
 			get{
-				return SimplifyAngle(this.azi);
+				return this.alt;
 			}
 			set{
-				this.azi = SimplifyAngle(value);
+				this.alt = SimplifyAngle(value);
 			}
 		}
 
 		public Vector3 euler{
 			get{
-				return new Vector3(alt, azi, 0);
+				return new Vector3(-alt, azi, 0);
 			}
 		}
 
 		public bool IsWithin(HorizontalCoords min, HorizontalCoords max){
 			return this.Altitude >= min.Altitude && this.Altitude <= max.Altitude && this.Azimuth >= min.Azimuth && this.Azimuth <= max.Azimuth;
+		}
+
+		public static bool FloatsApproximately(float a, float b, float tolerance){
+			return Mathf.Abs(a - b) < tolerance;
+		}
+
+		public bool IsApproximately(HorizontalCoords approx){
+			return FloatsApproximately(this.Altitude, approx.Altitude, FLOAT_TOLERANCE) && FloatsApproximately(this.Azimuth, approx.Azimuth, FLOAT_TOLERANCE);
 		}
 
 		public static bool operator ==(HorizontalCoords a, HorizontalCoords b){
@@ -91,7 +103,7 @@ public class GunMount : MonoBehaviour {
 	// 90 will allow gun to traverse a 180 degree arc
 
 	// is the gun changing its aim point?
-	private bool aiming;
+	public bool aiming;
 
 	// current aim angle
 	public HorizontalCoords currentAim;
@@ -109,17 +121,32 @@ public class GunMount : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		ShowDebugAimline();
 		if(aiming){
 			MoveAimTowards(targetAim);
+			Debug.Log ("reaiming");
+			if( currentAim.IsApproximately( targetAim ) ){
+				Debug.Log ("approximately in right dir");
+				currentAim = targetAim;
+			}
 			if( IsPointedIn(targetAim) ){
+				Debug.Log ("is pointed in target dir");
 				aiming = false;
 			}
 		}
 	}
 
+	void ShowDebugAimline(){
+		Debug.Log (currentAim.euler);
+		Debug.DrawRay(transform.position, Quaternion.Euler(currentAim.euler) * transform.forward, Color.cyan);
+	}
+
 	void MoveAimTowards(HorizontalCoords aimPoint){
-		currentAim.Azimuth = Mathf.MoveTowardsAngle(currentAim.Azimuth, targetAim.Azimuth, traverse.Azimuth * Time.deltaTime);
-		currentAim.Altitude = Mathf.MoveTowardsAngle(currentAim.Altitude, targetAim.Altitude, traverse.Altitude * Time.deltaTime);
+		Debug.Log ("Moving aim towards " + aimPoint);
+		aimPoint = CloseAsPossibleTo(aimPoint);
+		Debug.Log ("Closest Aimpoint is " + aimPoint);
+		currentAim.Azimuth = Mathf.MoveTowardsAngle(currentAim.Azimuth, aimPoint.Azimuth, traverse.Azimuth * Time.deltaTime);
+		currentAim.Altitude = Mathf.MoveTowardsAngle(currentAim.Altitude, aimPoint.Altitude, traverse.Altitude * Time.deltaTime);
 	}
 
 	// is the gun currently aimed in aimPoint?
