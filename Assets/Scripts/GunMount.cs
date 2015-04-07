@@ -148,12 +148,12 @@ public class GunMount : MonoBehaviour {
 		ShowDebugAimline();
 		if(aiming){
 			MoveAimTowards(targetAim);
-			Debug.Log ("reaiming");
+			//Debug.Log ("reaiming");
 			if( currentAim.IsApproximately( targetAim ) ){
-				Debug.Log ("approximately in right dir");
+				//Debug.Log ("approximately in right dir");
 				currentAim = targetAim;
 				if( IsPointedIn(targetAim) ){
-					Debug.Log ("is pointed in target dir");
+					//Debug.Log ("is pointed in target dir");
 					aiming = false;
 				}
 			}
@@ -162,7 +162,7 @@ public class GunMount : MonoBehaviour {
 	}
 
 	void ShowDebugAimline(){
-		Debug.Log (currentAim.euler);
+		//Debug.Log (currentAim.euler);
 		Debug.DrawRay(transform.position, Quaternion.Euler(currentAim.euler) * transform.forward, Color.cyan);
 	}
 	
@@ -171,9 +171,9 @@ public class GunMount : MonoBehaviour {
 	}
 	
 	void MoveAimTowards(HorizontalCoords aimPoint){
-		Debug.Log ("Moving aim towards " + aimPoint);
+		//Debug.Log ("Moving aim towards " + aimPoint);
 		aimPoint = CloseAsPossibleTo(aimPoint).simplified;
-		Debug.Log ("Closest Aimpoint is " + aimPoint);
+		//Debug.Log ("Closest Aimpoint is " + aimPoint);
 		// because of the structure of HorizontalCoords, not using MoveTowardsAngle should
 		// mean this works better here (doesn't turn through impossible angles to reach target angle)
 		currentAim.Azimuth = Mathf.MoveTowards(currentAim.Azimuth, aimPoint.Azimuth, traverse.Azimuth * Time.deltaTime);
