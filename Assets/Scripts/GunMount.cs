@@ -15,10 +15,11 @@ public class GunMount : MonoBehaviour {
 		private float alt; // vertical angular shift, from the horizon up towards the sky
 
 		// optimizations will surely result in less SimplifyAngle usage
+		// but OPTIMIZATIONS CAN WAIT HAH
 
 		public HorizontalCoords(float azi, float alt){
-			this.azi = SimplifyAngle(azi); 
-			this.alt = SimplifyAngle(alt);
+			this.azi = azi; 
+			this.alt = alt;
 		}
 		
 		// return value will be between -180 and 180
@@ -32,27 +33,50 @@ public class GunMount : MonoBehaviour {
 		}
 
 
-		public float Azimuth{
+		public float SimplifiedAzimuth{
 			get{
-				return this.azi;
+				return SimplifyAngle(this.azi);
 			}
 			set{
 				this.azi = SimplifyAngle(value);
 			}
 		}
 
-		public float Altitude{
+		public float SimplifiedAltitude{
 			get{
-				return this.alt;
+				return SimplifyAngle(this.alt);
 			}
 			set{
 				this.alt = SimplifyAngle(value);
 			}
 		}
 
+		public float Azimuth{
+			get{
+				return this.azi;
+			}
+			set{
+				this.azi = value;
+			}
+		}
+		public float Altitude{
+			get{
+				return this.alt;
+			}
+			set{
+				this.alt = value;
+			}
+		}
+
 		public Vector3 euler{
 			get{
 				return new Vector3(-alt, azi, 0);
+			}
+		}
+
+		public HorizontalCoords simplified{
+			get{
+				return new HorizontalCoords(SimplifiedAzimuth, SimplifiedAltitude);
 			}
 		}
 
@@ -123,38 +147,32 @@ public class GunMount : MonoBehaviour {
 	void Update () {
 		ShowDebugAimline();
 		if(aiming){
-			// TODO introduce coroutine such that if tries to aim at something
-			// for a long time and fails, assumes cannot reach target
-			// or re-checks if can actually point at target
-
-			// this should not happen if SetAimTarget function is used properly
-			// but when messing about in the editor who knows
-			// low priority, this TODO will probably just get removed
-			// but let's get it in the git
-
-			// TODO actually stop the thing from rotating through impossible angles
-
 			MoveAimTowards(targetAim);
 			Debug.Log ("reaiming");
 			if( currentAim.IsApproximately( targetAim ) ){
 				Debug.Log ("approximately in right dir");
 				currentAim = targetAim;
-			}
-			if( IsPointedIn(targetAim) ){
-				Debug.Log ("is pointed in target dir");
-				aiming = false;
+				if( IsPointedIn(targetAim) ){
+					Debug.Log ("is pointed in target dir");
+					aiming = false;
+				}
 			}
 		}
+		EnsureValidAngle();
 	}
 
 	void ShowDebugAimline(){
 		Debug.Log (currentAim.euler);
 		Debug.DrawRay(transform.position, Quaternion.Euler(currentAim.euler) * transform.forward, Color.cyan);
 	}
-
+	
+	void EnsureValidAngle(){
+		currentAim = CloseAsPossibleTo(currentAim);
+	}
+	
 	void MoveAimTowards(HorizontalCoords aimPoint){
 		Debug.Log ("Moving aim towards " + aimPoint);
-		aimPoint = CloseAsPossibleTo(aimPoint);
+		aimPoint = CloseAsPossibleTo(aimPoint).simplified;
 		Debug.Log ("Closest Aimpoint is " + aimPoint);
 		// because of the structure of HorizontalCoords, not using MoveTowardsAngle should
 		// mean this works better here (doesn't turn through impossible angles to reach target angle)
@@ -182,6 +200,7 @@ public class GunMount : MonoBehaviour {
 
 	// mount will try to orient in aimPoint
 	bool SetAimTarget(HorizontalCoords aimPoint){
+		// simplification here? would be redundant
 		bool viable = CanPointIn(aimPoint);
 		if(viable){
 			targetAim = aimPoint;
