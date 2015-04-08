@@ -5,7 +5,9 @@ public class PercussionFuse : Fuse {
 
 	public bool hasImpacted = false;
 
-	public float impact_detonation_threshold = 100f;
+	public float impact_detonation_threshold = 10f;
+	// int collisionMask
+	// layermask should be handled by the collider 
 
 	void OnCollisionEnter(Collision coll){
 		float speed = coll.relativeVelocity.magnitude;
