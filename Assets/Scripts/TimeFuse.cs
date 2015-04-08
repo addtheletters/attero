@@ -14,5 +14,4 @@ public class TimeFuse : Fuse {
 	public override bool ShouldDetonate (){
 		return fuseTime <= 0;
 	}
-
 }
