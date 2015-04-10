@@ -93,4 +93,8 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		accel += Vector3.down * grav;
 		return accel;
 	}
+
+	public void ApplyForce(Vector3 force){
+		vel += force / mass;
+	}
 }
