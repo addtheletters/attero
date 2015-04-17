@@ -130,12 +130,13 @@ public class VisualizerTest : MonoBehaviour {
 			recentScaledVol.RemoveAt(0);
 		}
 		float workingVol = RecentAvgVol();
-		float workingVolCubed = workingVol * workingVol * workingVol;
+		float workingVolSquared = workingVol * workingVol;
+		float workingVolCubed = workingVolSquared * workingVol;
 
 		Debug.Log ("working: " + workingVol + ".  curr:" + scaledVol);
 
 		transform.Rotate( currRotBaseVel *  workingVol );
-		currRotBaseVel = Vector3.SmoothDamp(currRotBaseVel, currRotTarget, ref currRotAccel, Time.smoothDeltaTime) * workingVolCubed;
+		currRotBaseVel = Vector3.SmoothDamp(currRotBaseVel, currRotTarget, ref currRotAccel, Time.smoothDeltaTime) * workingVolSquared;
 		rotChangeTime -= Time.smoothDeltaTime * workingVolCubed; 
 		if(rotChangeTime <= 0){
 			rotChangeTime = rotChangeTimeBuff;
