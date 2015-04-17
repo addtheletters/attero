@@ -31,7 +31,7 @@ public class ProximityFuse : Fuse {
 		// TODO velocity added
 		RaycastHit hit;
 		if(EXTEND_WITH_VELOCITY){
-			return Physics.SphereCast(transform.position, range, myLeadable.getVelocity(), out hit, proximityMask);
+			return Physics.SphereCast(transform.position, range, myLeadable.getVelocity() * Time.deltaTime, out hit, proximityMask);
 		}
 		else{
 			return Physics.CheckSphere(transform.position, range, proximityMask);
