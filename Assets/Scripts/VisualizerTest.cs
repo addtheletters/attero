@@ -50,6 +50,8 @@ public class VisualizerTest : MonoBehaviour {
 
 	public bool useSpectrum = true;
 
+	public float rotModifier = 2f;
+
 	public float rotChangeTimeBuff = .001f;
 	public float rotSpeed = 20f;
 	public float rotChangeAbility = 20f;
@@ -194,7 +196,7 @@ public class VisualizerTest : MonoBehaviour {
 		while(recentScaledVol.Count > volHistoryLen){
 			recentScaledVol.RemoveAt(0);
 		}
-		float workingVol = RecentAvgVol();
+		float workingVol = RecentAvgVol() * rotModifier;
 		float workingVolSquared = workingVol * workingVol;
 		float workingVolCubed = workingVolSquared * workingVol;
 
