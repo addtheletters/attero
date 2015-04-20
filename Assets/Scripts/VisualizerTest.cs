@@ -16,6 +16,7 @@ public class VisualizerTest : MonoBehaviour {
 
 	public int samples = 1024;
 	public int divisions = 1;
+	public int visualizedDivisions = 30;
 
 	public int sectsize;
 
@@ -32,6 +33,9 @@ public class VisualizerTest : MonoBehaviour {
 
 	private List<float> recentScaledVol;
 	public int volHistoryLen = 10;
+
+	private const float fMax = 22000;
+	private const float fMin = 10;
 	
 	// Use this for initialization
 	void Start () {
@@ -45,7 +49,7 @@ public class VisualizerTest : MonoBehaviour {
 			Debug.Log ("VisualizerTest: spectrum will fail, fewer samples than minimum of 64");
 		}
 		
-		for(int i = 0; i < divisions; i++){
+		for(int i = 0; i < visualizedDivisions; i++){
 			visuals[i] = (GameObject)Instantiate(visualPrefab, transform.position + spacing * i, transform.rotation);
 			visuals[i].transform.parent = this.transform;
 		}
@@ -75,6 +79,21 @@ public class VisualizerTest : MonoBehaviour {
 		return total / recentScaledVol.Count;
 	}
 
+	private float BandVol(float fLow, float fHigh, float[] spectrum){
+		fLow	= Mathf.Clamp (fLow, fMin, fMax);
+		fHigh	= Mathf.Clamp (fHigh, fLow, fMax);
+
+		int n1 = Mathf.FloorToInt(fLow * samples / fMax);
+		int n2 = Mathf.FloorToInt(fHigh * samples / fMax);
+
+		float total = 0;
+		for( int i = n1; i <= n2; i++){
+			total += spectrum[i];
+		}
+
+		return total / (n2-n1 + 1);
+	}
+
 	// Update is called once per frame
 	void Update () {
 		source.GetOutputData(audiodata, 0);
@@ -88,7 +107,7 @@ public class VisualizerTest : MonoBehaviour {
 
 		int dataIndex = 0;
 		int visualIndex = 0;
-		while(dataIndex < samples){
+		while(dataIndex < samples && visualIndex <= visualizedDivisions){
 			//Debug.Log ("data index: " + dataIndex + ", visual index: " + visualIndex);
 			if(visualIndex >= divisions){
 				visualIndex = divisions-1;
@@ -111,7 +130,7 @@ public class VisualizerTest : MonoBehaviour {
 			}
 		}
 
-		for(int i = 0; i < divisions; i++){
+		for(int i = 0; i < visualizedDivisions; i++){
 			visuals[i].GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.blue, Color.yellow, sectvol[i]);
 			visuals[i].transform.localScale = Vector3.one + scaling * Mathf.Max(0.001f, 50 * sectvol[i]);
 		}
@@ -123,8 +142,14 @@ public class VisualizerTest : MonoBehaviour {
 		for (int i = 0; i < samples; i++) {
 			vol += Mathf.Abs(audiodata[i]);
 		}
+
 		float rms = Mathf.Sqrt(vol / samples);
-		float scaledVol = Mathf.Clamp(Mathf.Sqrt(rms * vol), 0, 2) / 2;
+
+		float scaledVol = Mathf.Clamp( Mathf.Sqrt(rms * vol), 0, samples / 64) * 64 / samples;
+		
+//		Debug.Log("rms is " + rms);
+		Debug.Log("scaled vol is " + scaledVol);
+
 		recentScaledVol.Add(scaledVol);
 		while(recentScaledVol.Count > volHistoryLen){
 			recentScaledVol.RemoveAt(0);
@@ -133,7 +158,7 @@ public class VisualizerTest : MonoBehaviour {
 		float workingVolSquared = workingVol * workingVol;
 		float workingVolCubed = workingVolSquared * workingVol;
 
-		Debug.Log ("working: " + workingVol + ".  curr:" + scaledVol);
+		//Debug.Log ("working: " + workingVol + ".  curr:" + scaledVol);
 
 		transform.Rotate( currRotBaseVel *  workingVol );
 		currRotBaseVel = Vector3.SmoothDamp(currRotBaseVel, currRotTarget, ref currRotAccel, Time.smoothDeltaTime) * workingVolSquared;
@@ -143,5 +168,10 @@ public class VisualizerTest : MonoBehaviour {
 			//Debug.Log ("VisualizerTest: Changed target rotation speed.");
 			currRotTarget = (Quaternion.Euler(Random.insideUnitSphere * workingVolCubed * rotChangeAbility) * currRotTarget).normalized * rotSpeed;
 		}
+
+		// Targeting specific frequency bands?
+		//Debug.Log("first:" + BandVol(10, 100, audiospectrum));
+		//Debug.Log("second:" + BandVol(200, 300, audiospectrum));
+
 	}
 }
