@@ -130,6 +130,10 @@ public class VisualizerTest : MonoBehaviour {
 		return total / (n2-n1 + 1);
 	}
 
+	private float ScaleTo01(float val, float min, float max){
+		return Mathf.Clamp01((val - min) / (max - min));
+	}
+
 	// Update is called once per frame
 	void Update () {
 		source.GetOutputData(audiodata, 0);
@@ -176,14 +180,12 @@ public class VisualizerTest : MonoBehaviour {
 		// Volume display (rotation speed)?
 		float vol = 0;
 		for (int i = 0; i < samples; i++) {
-			vol += Mathf.Abs(audiodata[i]);
+			vol += audiodata[i] * audiodata[i];
 		}
 
 		float rms = Mathf.Sqrt(vol / samples);
-		int scaler = Logifier.Pow2(Logifier.LogLookup(samples) - 5);
-		Debug.Log ("scaling mult is " + scaler);
+		float scaledVol = ScaleTo01( Mathf.Sqrt(rms), 0, 1);
 
-		float scaledVol = Mathf.Clamp( Mathf.Sqrt(rms * vol), 0, scaler) / scaler;
 		
 //		Debug.Log("rms is " + rms);
 		Debug.Log("scaled vol is " + scaledVol);
