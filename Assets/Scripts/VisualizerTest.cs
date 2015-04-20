@@ -4,6 +4,34 @@ using System.Collections.Generic;
 
 public class VisualizerTest : MonoBehaviour {
 
+	public class Logifier{
+		private static int[] lookup;
+		public static void Setup(){
+			lookup = new int[256];
+			for (int i = 1; i < 256; i++){
+				lookup[i] = (int)(Mathf.Log(i) / Mathf.Log(2));
+			}
+		}
+		public static int LogLookup(int i)
+		{
+			if (i >= 0x1000000) { return lookup[i >> 24] + 24; }
+			else if (i >= 0x10000) { return lookup[i >> 16] + 16; }
+			else if (i >= 0x100) { return lookup[i >> 8] + 8; }
+			else { return lookup[i]; }
+		}
+		public static int Pow2(int p){
+			if(p < 0){
+				Debug.Log ("Not implemented");
+				return -1;
+			}
+			int ret = 1;
+			for(int i = 0; i < p; i++){
+				ret *= 2;
+			}
+			return ret;
+		}
+	}
+
 	public GameObject visualPrefab;
 	public Vector3 spacing;
 	public Vector3 scaling;
@@ -36,9 +64,13 @@ public class VisualizerTest : MonoBehaviour {
 
 	private const float fMax = 22000;
 	private const float fMin = 10;
+
+	private Logifier logifier;
 	
 	// Use this for initialization
 	void Start () {
+		Logifier.Setup();
+
 		recentScaledVol = new List<float>();
 
 		audiodata = new float[samples];
@@ -47,6 +79,10 @@ public class VisualizerTest : MonoBehaviour {
 
 		if(samples < 64){
 			Debug.Log ("VisualizerTest: spectrum will fail, fewer samples than minimum of 64");
+		}
+
+		if(visualizedDivisions > divisions){
+			Debug.Log ("VisualizerTest: number of visual bars specified exceeds number of tracked audio divisions");
 		}
 		
 		for(int i = 0; i < visualizedDivisions; i++){
@@ -144,8 +180,10 @@ public class VisualizerTest : MonoBehaviour {
 		}
 
 		float rms = Mathf.Sqrt(vol / samples);
+		int scaler = Logifier.Pow2(Logifier.LogLookup(samples) - 5);
+		Debug.Log ("scaling mult is " + scaler);
 
-		float scaledVol = Mathf.Clamp( Mathf.Sqrt(rms * vol), 0, samples / 64) * 64 / samples;
+		float scaledVol = Mathf.Clamp( Mathf.Sqrt(rms * vol), 0, scaler) / scaler;
 		
 //		Debug.Log("rms is " + rms);
 		Debug.Log("scaled vol is " + scaledVol);
