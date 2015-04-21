@@ -55,6 +55,16 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		vel 				+= 0.5f * (accel + aTPlus) * timescale ;
 	}
 
+	// Warning: Ballistic launches override the previous velocity and set it to a new one.
+	public static void BallisticForceLaunch(GameObject projectile, Vector3 direction, float force){
+		Ballistic bal = projectile.GetComponent<Ballistic> ();
+		if (!bal) {
+			Debug.Log("Ballistic Launch: added ballistic component to object lacking");
+			bal = projectile.AddComponent<Ballistic>();
+		}
+		bal.ApplyForce( direction.normalized * force );
+	}
+
 	public static void BallisticLaunch(GameObject projectile, Vector3 velocity){
 		Ballistic bal = projectile.GetComponent<Ballistic> ();
 		if (!bal) {
@@ -64,7 +74,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		else{
 			//Debug.Log("Ballistic Launch: projectile had ballistic component");
 		}
-		bal.vel = velocity;
+		BallisticForceLaunch(projectile, velocity, velocity.magnitude * bal.mass);
 	}
 
 	public static float AirDensity(Vector3 position){
