@@ -3,12 +3,8 @@ using System.Collections;
 
 public class Ballistic : MonoBehaviour, ILeadable {
 
-	public float grav = 9.8f;
-	public float dragConst = 0.001f; // breaks physics if greater than about 0.33f
-	public float mass = 1f; // wao
+	public BallisticProfile profile = BallisticProfile.standard;
 
-	//public float dragExpon = 2f;
-	// set to the same thing forever and ever, so evaluating the sqrt and pow just waste computation
 	public float lTime = 5f;
 	public float timer;
 
@@ -41,7 +37,6 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	void EulerPhysicsStep(float timescale){
 		prevPos = transform.position;
-
 		transform.position += vel * timescale;
 		vel += getAcceleration() * timescale;
 	}
@@ -71,7 +66,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 			Debug.Log("Ballistic Launch: added ballistic component to object lacking it");
 			bal = projectile.AddComponent<Ballistic>();
 		}
-		BallisticForceLaunch(projectile, velocity, velocity.magnitude * bal.mass);
+		BallisticForceLaunch(projectile, velocity, velocity.magnitude * bal.profile.Mass);
 	}
 
 	public static float AirDensity(Vector3 position){
@@ -79,11 +74,11 @@ public class Ballistic : MonoBehaviour, ILeadable {
 	}
 
 	public float getSqrTerminalVelocity(){
-		return mass * grav / dragConst;
+		return profile.Mass * BallisticProfile.Gravity / profile.Drag;
 	}
 
 	public float getCharacteristicTime(){
-		return Mathf.Sqrt(getSqrTerminalVelocity()) / grav;
+		return Mathf.Sqrt(getSqrTerminalVelocity()) / BallisticProfile.Gravity;
 	}
 
 	public Vector3 getPosition(){
@@ -96,13 +91,13 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	Vector3 getAcceleration(){
 		// drag
-		Vector3 accel = vel.normalized * -dragConst * vel.sqrMagnitude * AirDensity(transform.position) / mass;
+		Vector3 accel = vel.normalized * -profile.Drag * vel.sqrMagnitude * AirDensity(transform.position) / profile.Mass;
 		// gravity
-		accel += Vector3.down * grav;
+		accel += Vector3.down * BallisticProfile.Gravity;
 		return accel;
 	}
 
 	public void ApplyForce(Vector3 force){
-		vel += force / mass;
+		vel += force / profile.Mass;
 	}
 }

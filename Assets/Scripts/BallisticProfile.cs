@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public struct BallisticProfile {
 
-	[SerializeField]
 	private static float gravity = 9.8f;// gravity constant applied; this should be constant
 
 	[SerializeField]
@@ -13,7 +13,11 @@ public struct BallisticProfile {
 
 	[SerializeField]
 	// mass of the object; more mass = more inertia = less effective air drag force
-	private float mass;			
+	private float mass;
+
+	// exponent for drag, would realistically change depending on object shape and speed
+	// but for simplicity and computational efficiency will remain at a superficially realistic 2
+	//public float dragExpon = 2f;
 
 	public BallisticProfile(float drag, float mass){
 		this.drag = drag;
@@ -43,11 +47,12 @@ public struct BallisticProfile {
 			return gravity;
 		}
 		set{
+			Debug.Log ("BallisticProfile: Warning: Set universal gravity constant to " + value);
 			gravity = value;
 		}
 	}
 
-	private static BallisticProfile standard{
+	public static BallisticProfile standard{
 		get{
 			return new BallisticProfile(0.001f, 1f);
 		}

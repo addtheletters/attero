@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public struct HorizontalCoords{
 	
 	private static readonly float FLOAT_TOLERANCE = 0.001f;
@@ -27,8 +28,7 @@ public struct HorizontalCoords{
 		Debug.Log (angle + " simplified is " + simpliflied);
 		return simpliflied;
 	}
-	
-	
+
 	public float SimplifiedAzimuth{
 		get{
 			return SimplifyAngle(this.azi);
@@ -46,7 +46,7 @@ public struct HorizontalCoords{
 			this.alt = SimplifyAngle(value);
 		}
 	}
-	
+
 	public float Azimuth{
 		get{
 			return this.azi;
