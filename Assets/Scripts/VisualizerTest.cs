@@ -191,7 +191,7 @@ public class VisualizerTest : MonoBehaviour {
 
 		
 //		Debug.Log("rms is " + rms);
-		Debug.Log("scaled vol is " + scaledVol);
+//		Debug.Log("scaled vol is " + scaledVol);
 
 		recentScaledVol.Add(scaledVol);
 		while(recentScaledVol.Count > volHistoryLen){

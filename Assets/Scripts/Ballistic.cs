@@ -6,6 +6,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 	public float grav = 9.8f;
 	public float dragConst = 0.001f; // breaks physics if greater than about 0.33f
 	public float mass = 1f; // wao
+
 	//public float dragExpon = 2f;
 	// set to the same thing forever and ever, so evaluating the sqrt and pow just waste computation
 	public float lTime = 5f;
