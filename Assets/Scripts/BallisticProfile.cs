@@ -4,7 +4,7 @@ using System.Collections;
 public struct BallisticProfile {
 
 	[SerializeField]
-	private static float grav;// gravity constant applied; this should be constant
+	private static float gravity = 9.8f;// gravity constant applied; this should be constant
 
 	[SerializeField]
 	private float drag;
@@ -28,7 +28,6 @@ public struct BallisticProfile {
 			this.drag = value;
 		}
 	}
-
 	
 	public float Mass{
 		get{
@@ -39,6 +38,20 @@ public struct BallisticProfile {
 		}
 	}
 
+	public static float Gravity{
+		get{
+			return gravity;
+		}
+		set{
+			gravity = value;
+		}
+	}
+
+	private static BallisticProfile standard{
+		get{
+			return new BallisticProfile(0.001f, 1f);
+		}
+	}
 
 	public static bool operator ==(BallisticProfile a, BallisticProfile b){
 		return a.drag == b.drag && a.mass == b.mass;
