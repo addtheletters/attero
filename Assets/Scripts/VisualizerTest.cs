@@ -50,6 +50,7 @@ public class VisualizerTest : MonoBehaviour {
 
 	public bool useSpectrum = true;
 
+	public float spectModifier = 2f;
 	public float rotModifier = 2f;
 
 	public float rotChangeTimeBuff = .001f;
@@ -174,7 +175,7 @@ public class VisualizerTest : MonoBehaviour {
 
 		for(int i = 0; i < visualizedDivisions; i++){
 			visuals[i].GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.blue, Color.yellow, sectvol[i]);
-			visuals[i].transform.localScale = Vector3.one + scaling * Mathf.Max(0.001f, 50 * sectvol[i]);
+			visuals[i].transform.localScale = Vector3.one + scaling * spectModifier * Mathf.Max(0.001f, 50 * sectvol[i]);
 		}
 
 
@@ -214,6 +215,5 @@ public class VisualizerTest : MonoBehaviour {
 		// Targeting specific frequency bands?
 		//Debug.Log("first:" + BandVol(10, 100, audiospectrum));
 		//Debug.Log("second:" + BandVol(200, 300, audiospectrum));
-
 	}
 }
