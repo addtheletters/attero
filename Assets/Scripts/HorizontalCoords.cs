@@ -104,8 +104,7 @@ public struct HorizontalCoords{
 		return (azi.GetHashCode() + alt).GetHashCode(); // totally not ripped from a certain complex number struct
 	}
 	
-	public override string ToString ()
-	{
+	public override string ToString(){
 		return string.Format ("[HorizontalCoords: Azimuth={0}, Altitude={1}, euler={2}]", Azimuth, Altitude, euler);
 	}	
 }

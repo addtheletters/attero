@@ -8,7 +8,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 	public float lTime = 5f;
 	public float timer;
 
-	public Vector3 vel;
+	Vector3 vel;
 	Vector3 prevPos;
 	
 	void FixedUpdate () {
@@ -30,7 +30,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		RaycastHit hit;
 		if (Physics.Linecast(prevPos, transform.position, out hit)){
 			//Debug.Log("Ballistic hit at: " + hit.point);
-			Destroy(this.gameObject);
+			BallisticHit(hit);
 		}
 
 	}
@@ -48,6 +48,11 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		transform.position	+= (vel + 0.5f * accel * timescale) * timescale; // (vel * timescale) + (accel * 0.5f * timescale * timescale); // p = p1 + v*dt + .5*a*dt^2 // (not quite euler)
 		Vector3 aTPlus		= 2f * (transform.position - prevPos - (vel * timescale)); // future frame acceleration
 		vel 				+= 0.5f * (accel + aTPlus) * timescale ;
+	}
+
+	void BallisticHit(RaycastHit hit){
+		// yay this can be overloaded and stuff
+		Destroy(this.gameObject);
 	}
 
 	// Warning: Ballistic launches override the previous velocity and set it to a new one.

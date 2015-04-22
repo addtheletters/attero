@@ -74,8 +74,7 @@ public struct BallisticProfile {
 		return (drag.GetHashCode() + mass).GetHashCode(); // again totally not ripped from a certain complex number struct
 	}
 
-	public override string ToString ()
-	{
+	public override string ToString (){
 		return string.Format ("[BallisticProfile: Drag={0}, Mass={1}]", Drag, Mass);
 	}
 }

@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof (Gun))]
 public abstract class GunControl : MonoBehaviour {
 
 	protected Gun gun;
 
 	protected void Start(){
+		// this check should be unnecessary while the RequireComponent is present
 		gun = GetComponent<Gun> ();
 		if (!gun) {
 			Debug.Log("GunControl: no gun on object " + this.gameObject);
