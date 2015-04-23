@@ -7,15 +7,24 @@ public class Gun : MonoBehaviour {
 	public float muzzleVel	= 300f;
 	public GameObject projectile;
 
+	private bool provideGunInfo;
+
 	float shotsFired = 0;
+
+	void Start(){
+		if(projectile.GetComponent<BallisticReporter>() == null){
+			provideGunInfo = false;
+		}
+		else{
+			provideGunInfo = true;
+		}
+	}
 
 	public GameObject FireAt(Vector3 target){
 		return Fire (target - transform.position);
 	}
 
 	public GameObject Fire(Vector3 direction){
-		// debug aimline
-
 		GameObject fired = (GameObject)Instantiate(projectile, transform.position, transform.rotation);
 		Vector3 launchvec = direction.normalized * muzzleVel;
 		Vector3 variance = inaccuracy * Random.insideUnitSphere; // unit sphere used to get random vector that in-total rotates at most 'inaccuracy'
@@ -31,6 +40,9 @@ public class Gun : MonoBehaviour {
 
 		shotsFired ++;
 
+		if(provideGunInfo){
+			((BallisticReporter)fired.GetComponent<BallisticReporter>()).Bsi = new BallisticShotInfo(BallisticShotInfo.GetAngleFor(direction),muzzleVel);
+		}
 		return fired;
 	}
 }

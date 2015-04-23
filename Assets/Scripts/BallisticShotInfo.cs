@@ -33,6 +33,11 @@ public struct BallisticShotInfo {
 		}
 	}
 
+	public static float GetAngleFor(Vector3 aim){
+		// TODO test this
+		return 90 - Vector3.Angle(aim, Vector3.up);
+	}
+
 	public static bool operator ==(BallisticShotInfo a, BallisticShotInfo b){
 		return a.angle == b.angle && a.speed == b.speed;
 	}

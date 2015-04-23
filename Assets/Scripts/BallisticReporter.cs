@@ -23,7 +23,7 @@ public class BallisticReporter : MonoBehaviour {
 			}
 		}
 		if(bsi == default(BallisticShotInfo)){
-			Debug.Log ("Ballistic Reporter: BSI is null, needs assignment");
+			Debug.Log ("Ballistic Reporter: BSI is not set, needs assignment");
 		}
 		bal = GetComponent<Ballistic>();
 	}
@@ -36,12 +36,20 @@ public class BallisticReporter : MonoBehaviour {
 	}
 
 	void Report(){
-		recorder.RecordShotData(bal.profile, bsi, new BallisticResult( GetRelativeResult(), bal.timer ));
+		recorder.RecordShotData(bal.profile, new BallisticResult( GetRelativeResult(), bal.timer ), bsi );
 	}
 
 	Vector2 GetRelativeResult(){
 		Vector3 deltaVec = bal.getPosition() - recorderObject.transform.position;
 		return new Vector2(Mathf.Sqrt(deltaVec.x * deltaVec.x + deltaVec.z * deltaVec.z), deltaVec.y);
 	}
-		                  
+	
+	public BallisticShotInfo Bsi {
+		get {
+			return bsi;
+		}
+		set {
+			bsi = value;
+		}
+	}
 }
