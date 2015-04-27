@@ -203,6 +203,11 @@ public class VisualizerTest : MonoBehaviour {
 
 		//Debug.Log ("working: " + workingVol + ".  curr:" + scaledVol);
 
+		source.pitch =  2 * Mathf.Cos( 2 * Mathf.PI * ScaleTo01(Time.time % 12f, 0, 12f) );
+
+
+		//source.pitch = 1 + 2 - workingVol * 3;
+
 		transform.Rotate( currRotBaseVel *  workingVol );
 		currRotBaseVel = Vector3.SmoothDamp(currRotBaseVel, currRotTarget, ref currRotAccel, Time.smoothDeltaTime) * workingVolSquared;
 		rotChangeTime -= Time.smoothDeltaTime * workingVolCubed; 
