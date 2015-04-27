@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CalibrationGunControl : GunControl {
-	// Defaults to firing along the +x axis
+	// Defaults to firing along the +z axis
 	// Fires incrementally at angles
 
 	private float startAltitude;
@@ -27,13 +27,9 @@ public class CalibrationGunControl : GunControl {
 		currentAltitude = startAltitude;
 	}
 
-	public static Vector3 AimVector( float angle ){
-		return new Vector3(); // TODO this
-	}
-	
 	#region implemented abstract members of GunControl
 	public override void Shoot (){
-		gun.Fire( AimVector(currentAltitude) );
+		gun.Fire( BallisticShotInfo.GetAimVectorFor(currentAltitude) );
 	}
 
 	public override bool ShouldFire (){
