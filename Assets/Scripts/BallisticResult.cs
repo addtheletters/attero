@@ -12,9 +12,22 @@ public struct BallisticResult {
 	[SerializeField]
 	private float flightTime;
 
+	// did this result come from the projectile hitting something?
+	[SerializeField]
+	private bool impact;
+
+	// private bool hasRicocheted? maybe impact serves the purpose
+	
+	public BallisticResult(Vector2 position, float flightTime, bool impact){
+		this.position = position;
+		this.flightTime = flightTime;
+		this.impact = impact;
+	}
+	
 	public BallisticResult(Vector2 position, float flightTime){
 		this.position = position;
 		this.flightTime = flightTime;
+		this.impact = false;
 	}
 
 	public Vector2 Position {
@@ -52,7 +65,7 @@ public struct BallisticResult {
 	}
 	
 	public override string ToString(){
-		return string.Format ("[BallisticResult: position={0}, flightTime={1}]", position, flightTime);
+		return string.Format ("[BallisticResult: position={0}, flightTime={1}, impact={2}]", position, flightTime, impact);
 	}
 
 

@@ -4,8 +4,7 @@ using System.Collections;
 [RequireComponent (typeof (Ballistic))]
 public class BallisticReporter : MonoBehaviour {
 
-	public GameObject recorderObject;
-	private IGunRecorder recorder;
+	public IGunRecorder recorder;
 	private Ballistic bal;
 	private BallisticShotInfo bsi = default(BallisticShotInfo); // assigned when appropriate launch platform fires the shot
 
@@ -13,6 +12,7 @@ public class BallisticReporter : MonoBehaviour {
 	protected float lastReportTime;
 
 	void Start () {
+		/*
 		if(!recorderObject){
 			Debug.Log ("Ballistic Reporter: no recorderObject assigned, cannot put data anywhere");
 		}
@@ -21,7 +21,8 @@ public class BallisticReporter : MonoBehaviour {
 			if(recorder == null){
 				Debug.Log ("Ballistic Reporter: no recorder found on assigned recorderObject, cannot put data anywhere");
 			}
-		}
+		}*/
+
 		if(bsi == default(BallisticShotInfo)){
 			Debug.Log ("Ballistic Reporter: BSI is not set, needs assignment");
 		}
@@ -29,18 +30,23 @@ public class BallisticReporter : MonoBehaviour {
 	}
 	
 	void Update () {
-		lastReportTime = Time.time;
 		if((Time.time - lastReportTime) > reportInterval){
 			Report();
+			lastReportTime = Time.time;
 		}
 	}
 
-	void Report(){
+	public void Report(){
 		recorder.RecordShotData(bal.profile, new BallisticResult( GetRelativeResult(), bal.timer ), bsi );
 	}
 
+	public void Report(bool impact){
+		recorder.RecordShotData(bal.profile, new BallisticResult( GetRelativeResult(), bal.timer, impact), bsi );
+	}
+
+
 	Vector2 GetRelativeResult(){
-		Vector3 deltaVec = bal.getPosition() - recorderObject.transform.position;
+		Vector3 deltaVec = bal.getPosition();
 		return new Vector2(Mathf.Sqrt(deltaVec.x * deltaVec.x + deltaVec.z * deltaVec.z), deltaVec.y);
 	}
 	

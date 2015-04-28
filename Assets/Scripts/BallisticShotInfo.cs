@@ -39,7 +39,7 @@ public struct BallisticShotInfo {
 	}
 
 	public static Vector3 GetAimVectorFor( float angle ){
-		return (new Vector3(0, 0, 1)) * Quaternion.Euler(angle, 0, 0); // along z+ axis, so rotation on x axis means rotating upwards?
+		return Quaternion.Euler(-angle, 0, 0) * (new Vector3(0, 0, 1)); // along z+ axis, so rotation on x axis means rotating upwards?
 	}
 
 	public static bool operator ==(BallisticShotInfo a, BallisticShotInfo b){

@@ -5,13 +5,19 @@ public class CalibrationGunControl : GunControl {
 	// Defaults to firing along the +z axis
 	// Fires incrementally at angles
 
-	private float startAltitude;
-	private float maxAltitude;
-	private float altitudeIncrement;
+	private float startAltitude = 0;
+	private float maxAltitude = 90;
+	private float altitudeIncrement = 5;
 
 	private float currentAltitude;
 
 	private bool roundsComplete = false;
+
+	public bool Complete{
+		get{
+			return roundsComplete;
+		}
+	}
 
 	public void FireCalibShot(){
 		Shoot();
@@ -29,7 +35,9 @@ public class CalibrationGunControl : GunControl {
 
 	#region implemented abstract members of GunControl
 	public override void Shoot (){
-		gun.Fire( BallisticShotInfo.GetAimVectorFor(currentAltitude) );
+		GameObject projectile = gun.Fire( BallisticShotInfo.GetAimVectorFor(currentAltitude) );
+		projectile.GetComponent<BallisticReporter>().Bsi = new BallisticShotInfo(currentAltitude, gun.muzzleVel);
+		projectile.GetComponent<BallisticReporter>().recorder = GetComponent<IGunRecorder>();
 	}
 
 	public override bool ShouldFire (){

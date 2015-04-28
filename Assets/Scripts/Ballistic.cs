@@ -52,6 +52,10 @@ public class Ballistic : MonoBehaviour, ILeadable {
 
 	void BallisticHit(RaycastHit hit){
 		// yay this can be overloaded and stuff
+		BallisticReporter br = GetComponent<BallisticReporter>();
+		if(br != default(BallisticReporter)){
+			br.Report(true);
+		}
 		Destroy(this.gameObject);
 	}
 

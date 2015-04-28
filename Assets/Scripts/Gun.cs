@@ -7,17 +7,17 @@ public class Gun : MonoBehaviour {
 	public float muzzleVel	= 300f;
 	public GameObject projectile;
 
-	private bool provideGunInfo;
 
 	float shotsFired = 0;
 
 	void Start(){
+		/*
 		if(projectile.GetComponent<BallisticReporter>() == null){
 			provideGunInfo = false;
 		}
 		else{
 			provideGunInfo = true;
-		}
+		}*/
 	}
 
 	public GameObject FireAt(Vector3 target){
@@ -39,10 +39,13 @@ public class Gun : MonoBehaviour {
 		Debug.DrawRay (transform.position, launchvec.normalized * 5f, DebugColors.FIRELINE, 1f);
 
 		shotsFired ++;
-
+		/*
+		 * 
 		if(provideGunInfo){
 			((BallisticReporter)fired.GetComponent<BallisticReporter>()).Bsi = new BallisticShotInfo(BallisticShotInfo.GetAngleFor(direction),muzzleVel);
 		}
+		*
+		*/
 		return fired;
 	}
 }
