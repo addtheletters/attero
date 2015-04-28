@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public struct BallisticShotInfo {
+public struct BallisticShotInfo : IJSONable {
 
 	// upward from the horizon. 90 is straight up
 	[SerializeField]
@@ -62,5 +62,7 @@ public struct BallisticShotInfo {
 		return string.Format ("[BallisticShotInfo: Angle={0}, Speed={1}]", Angle, Speed);
 	}
 
-
+	public string ToJSON(){
+		return string.Format("{type:\"BallisticShotInfo\", angle:{0}, speed:{1}}", Angle, Speed);
+	}
 }

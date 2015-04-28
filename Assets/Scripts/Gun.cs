@@ -35,8 +35,8 @@ public class Gun : MonoBehaviour {
 		Ballistic.BallisticLaunch (fired, launchvec);
 
 		// debug lines
-		Debug.DrawRay (transform.position, (direction * muzzleVel).normalized * 3f, DebugColors.AIMLINE, 1f);
-		Debug.DrawRay (transform.position, launchvec.normalized * 5f, DebugColors.FIRELINE, 1f);
+		Debug.DrawRay (transform.position, (direction * muzzleVel).normalized * 3f, DebugUtil.Colors.AIMLINE, 1f);
+		Debug.DrawRay (transform.position, launchvec.normalized * 5f, DebugUtil.Colors.FIRELINE, 1f);
 
 		shotsFired ++;
 		/*

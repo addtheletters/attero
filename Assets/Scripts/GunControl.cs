@@ -37,6 +37,6 @@ public abstract class GunControl : MonoBehaviour {
 	}
 
 	public void DebugShowLead( ILeadable target ){
-		Debug.DrawRay (target.getPosition(), target.getVelocity() * 100f, DebugColors.LEADLINE, 2f);
+		Debug.DrawRay (target.getPosition(), target.getVelocity() * 100f, DebugUtil.Colors.LEADLINE, 2f);
 	}
 }

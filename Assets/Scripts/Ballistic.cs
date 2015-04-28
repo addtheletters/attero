@@ -24,7 +24,7 @@ public class Ballistic : MonoBehaviour, ILeadable {
 		VerletPhysicsStep (timescale);
 
 		// debug line
-		Debug.DrawLine (prevPos, transform.position, DebugColors.TrailColor(vel.sqrMagnitude), .3f);
+		Debug.DrawLine (prevPos, transform.position, DebugUtil.Colors.TrailColor(vel.sqrMagnitude), .3f);
 
 		// point projectile collision
 		RaycastHit hit;

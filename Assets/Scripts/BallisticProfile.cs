@@ -2,7 +2,7 @@
 using System.Collections;
 
 [System.Serializable]
-public struct BallisticProfile {
+public struct BallisticProfile : IJSONable{
 
 	private static float gravity = 9.8f;// gravity constant applied; this should be constant
 
@@ -76,5 +76,9 @@ public struct BallisticProfile {
 
 	public override string ToString (){
 		return string.Format ("[BallisticProfile: Drag={0}, Mass={1}]", Drag, Mass);
+	}
+
+	public string ToJSON(){
+		return string.Format("{type:\"BallisticProfile\", drag:{0}, mass:{1}, gravity:{2}}", Drag, Mass, Gravity);
 	}
 }

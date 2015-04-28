@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public struct BallisticResult {
+public struct BallisticResult :IJSONable {
 
 	// where the shot is
 	[SerializeField]
@@ -68,5 +68,7 @@ public struct BallisticResult {
 		return string.Format ("[BallisticResult: position={0}, flightTime={1}, impact={2}]", position, flightTime, impact);
 	}
 
-
+	public string ToJSON(){
+		return string.Format("{type:\"BallisticResult\", position:{0}, flightTime:{1}, impact:{2}}", DebugUtil.Logging.VectorJSON(position), flightTime, impact);
+	}
 }
