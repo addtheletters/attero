@@ -19,6 +19,18 @@ public class DebugUtil {
 		public static string VectorJSON(Vector3 vec){
 			return string.Format("[{0}, {1}, {2}]", vec.x, vec.y, vec.z);
 		}
+
+		public static string ToJSONArray(IJSONable[] jsonables){
+			string buffer = "[";
+			for( int i = 0; i < jsonables.Length; i++){
+				buffer += jsonables[i].ToJSON();
+				if(i < jsonables.Length - 1){
+					buffer += ", ";
+				}
+			}
+			buffer += "]";
+			return buffer;
+		}
 	}
 
 	public class FileIO{
