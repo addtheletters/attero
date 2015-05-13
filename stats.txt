@@ -1,0 +1,278 @@
+{ data:[
+{
+profile:[BallisticProfile: Drag=0.1, Mass=1],
+shots:[
+{
+[BallisticShotInfo: Angle=0, Speed=20]: [
+[BallisticResult: position=(0.0, 0.0), flightTime=0, impact=False],
+[BallisticResult: position=(8.3, -0.6), flightTime=0.52, impact=False],
+[BallisticResult: position=(13.9, -2.1), flightTime=1.02, impact=False],
+[BallisticResult: position=(18.2, -4.3), flightTime=1.519999, impact=False],
+[BallisticResult: position=(21.7, -7.3), flightTime=2.039999, impact=False],
+[BallisticResult: position=(24.5, -10.9), flightTime=2.559998, impact=False],
+[BallisticResult: position=(26.7, -14.9), flightTime=3.079998, impact=False],
+[BallisticResult: position=(28.4, -19.1), flightTime=3.579997, impact=False],
+[BallisticResult: position=(29.8, -23.7), flightTime=4.099997, impact=False],
+[BallisticResult: position=(30.9, -28.5), flightTime=4.619997, impact=False],
+[BallisticResult: position=(31.7, -33.3), flightTime=5.119996, impact=False],
+[BallisticResult: position=(32.4, -38.3), flightTime=5.639996, impact=False],
+[BallisticResult: position=(32.9, -43.1), flightTime=6.139995, impact=False],
+[BallisticResult: position=(33.3, -48.2), flightTime=6.659995, impact=False],
+[BallisticResult: position=(33.6, -53.3), flightTime=7.179994, impact=False],
+[BallisticResult: position=(33.8, -58.2), flightTime=7.679994, impact=False],
+[BallisticResult: position=(34.0, -63.4), flightTime=8.199998, impact=False],
+[BallisticResult: position=(34.2, -68.5), flightTime=8.72001, impact=False],
+[BallisticResult: position=(34.3, -73.6), flightTime=9.240022, impact=False],
+[BallisticResult: position=(34.4, -78.6), flightTime=9.740033, impact=False],
+[BallisticResult: position=(34.4, -83.7), flightTime=10.26005, impact=False],
+[BallisticResult: position=(34.5, -88.9), flightTime=10.78006, impact=False],
+[BallisticResult: position=(34.5, -93.8), flightTime=11.28007, impact=False],
+[BallisticResult: position=(34.5, -99.0), flightTime=11.80008, impact=False],
+[BallisticResult: position=(34.6, -104.1), flightTime=12.32009, impact=False],
+[BallisticResult: position=(34.6, -109.1), flightTime=12.8201, impact=False],
+[BallisticResult: position=(34.6, -114.2), flightTime=13.34012, impact=False],
+[BallisticResult: position=(34.6, -119.2), flightTime=13.84013, impact=False],
+[BallisticResult: position=(34.6, -124.3), flightTime=14.36014, impact=False],
+[BallisticResult: position=(34.6, -129.5), flightTime=14.88015, impact=False],
+[BallisticResult: position=(34.6, -134.4), flightTime=15.38016, impact=False],
+[BallisticResult: position=(34.6, -139.6), flightTime=15.90017, impact=False],
+[BallisticResult: position=(34.6, -144.7), flightTime=16.42019, impact=False],
+[BallisticResult: position=(34.6, -149.9), flightTime=16.9402, impact=False],
+[BallisticResult: position=(34.6, -154.8), flightTime=17.44021, impact=False],
+[BallisticResult: position=(34.6, -160.0), flightTime=17.96022, impact=False],
+[BallisticResult: position=(34.6, -164.9), flightTime=18.46023, impact=False],
+[BallisticResult: position=(34.6, -170.1), flightTime=18.98024, impact=False],
+[BallisticResult: position=(34.6, -175.0), flightTime=19.48026, impact=False],
+[BallisticResult: position=(0.4, 0.0), flightTime=0.02, impact=False],
+[BallisticResult: position=(8.5, -0.6), flightTime=0.54, impact=False],
+[BallisticResult: position=(14.3, -2.2), flightTime=1.06, impact=False],
+[BallisticResult: position=(18.5, -4.5), flightTime=1.559999, impact=False],
+[BallisticResult: position=(21.9, -7.6), flightTime=2.079999, impact=False],
+[BallisticResult: position=(24.6, -11.0), flightTime=2.579998, impact=False],
+[BallisticResult: position=(26.8, -15.1), flightTime=3.099998, impact=False],
+]
+},
+{
+[BallisticShotInfo: Angle=5, Speed=20]: [
+[BallisticResult: position=(0.4, 0.0), flightTime=0.02, impact=False],
+[BallisticResult: position=(8.2, 0.1), flightTime=0.52, impact=False],
+[BallisticResult: position=(9.5, 0.0), flightTime=0.6199999, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=10, Speed=20]: [
+[BallisticResult: position=(0.4, 0.1), flightTime=0.02, impact=False],
+[BallisticResult: position=(8.2, 0.8), flightTime=0.52, impact=False],
+[BallisticResult: position=(13.7, 0.3), flightTime=1.02, impact=False],
+[BallisticResult: position=(15.0, 0.0), flightTime=1.159999, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=15, Speed=20]: [
+[BallisticResult: position=(0.4, 0.1), flightTime=0.02, impact=False],
+[BallisticResult: position=(8.3, 1.6), flightTime=0.54, impact=False],
+[BallisticResult: position=(13.9, 1.5), flightTime=1.06, impact=False],
+[BallisticResult: position=(18.2, 0.2), flightTime=1.579999, impact=False],
+[BallisticResult: position=(18.7, 0.0), flightTime=1.639999, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=20, Speed=20]: [
+[BallisticResult: position=(0.4, 0.1), flightTime=0.02, impact=False],
+[BallisticResult: position=(7.8, 2.2), flightTime=0.52, impact=False],
+[BallisticResult: position=(13.3, 2.7), flightTime=1.04, impact=False],
+[BallisticResult: position=(17.5, 1.9), flightTime=1.539999, impact=False],
+[BallisticResult: position=(21.0, 0.0), flightTime=2.059999, impact=False],
+[BallisticResult: position=(21.2, -0.1), flightTime=2.079999, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=25, Speed=20]: [
+[BallisticResult: position=(0.4, 0.2), flightTime=0.02, impact=False],
+[BallisticResult: position=(7.8, 3.0), flightTime=0.54, impact=False],
+[BallisticResult: position=(12.9, 3.8), flightTime=1.04, impact=False],
+[BallisticResult: position=(17.1, 3.3), flightTime=1.559999, impact=False],
+[BallisticResult: position=(20.5, 1.7), flightTime=2.079999, impact=False],
+[BallisticResult: position=(22.7, 0.0), flightTime=2.459998, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=30, Speed=20]: [
+[BallisticResult: position=(0.3, 0.2), flightTime=0.02, impact=False],
+[BallisticResult: position=(7.2, 3.5), flightTime=0.52, impact=False],
+[BallisticResult: position=(12.3, 4.9), flightTime=1.04, impact=False],
+[BallisticResult: position=(16.4, 4.8), flightTime=1.559999, impact=False],
+[BallisticResult: position=(19.8, 3.5), flightTime=2.079999, impact=False],
+[BallisticResult: position=(22.5, 1.3), flightTime=2.579998, impact=False],
+[BallisticResult: position=(23.6, 0.0), flightTime=2.819998, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=35, Speed=20]: [
+[BallisticResult: position=(0.0, 0.0), flightTime=0, impact=False],
+[BallisticResult: position=(6.8, 4.2), flightTime=0.52, impact=False],
+[BallisticResult: position=(11.7, 6.0), flightTime=1.04, impact=False],
+[BallisticResult: position=(15.6, 6.2), flightTime=1.559999, impact=False],
+[BallisticResult: position=(18.7, 5.3), flightTime=2.059999, impact=False],
+[BallisticResult: position=(21.5, 3.2), flightTime=2.579998, impact=False],
+[BallisticResult: position=(23.7, 0.5), flightTime=3.079998, impact=False],
+[BallisticResult: position=(24.0, -0.1), flightTime=3.159998, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=40, Speed=20]: [
+[BallisticResult: position=(0.3, 0.3), flightTime=0.02, impact=False],
+[BallisticResult: position=(6.6, 4.9), flightTime=0.54, impact=False],
+[BallisticResult: position=(11.0, 7.0), flightTime=1.04, impact=False],
+[BallisticResult: position=(14.7, 7.6), flightTime=1.559999, impact=False],
+[BallisticResult: position=(17.8, 6.9), flightTime=2.079999, impact=False],
+[BallisticResult: position=(20.3, 5.1), flightTime=2.579998, impact=False],
+[BallisticResult: position=(22.5, 2.4), flightTime=3.099998, impact=False],
+[BallisticResult: position=(23.9, -0.1), flightTime=3.479997, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=45, Speed=20]: [
+[BallisticResult: position=(0.3, 0.3), flightTime=0.02, impact=False],
+[BallisticResult: position=(5.9, 5.3), flightTime=0.52, impact=False],
+[BallisticResult: position=(10.1, 7.9), flightTime=1.04, impact=False],
+[BallisticResult: position=(13.6, 8.9), flightTime=1.559999, impact=False],
+[BallisticResult: position=(16.4, 8.5), flightTime=2.059999, impact=False],
+[BallisticResult: position=(18.9, 6.9), flightTime=2.579998, impact=False],
+[BallisticResult: position=(21.0, 4.4), flightTime=3.079998, impact=False],
+[BallisticResult: position=(22.8, 1.1), flightTime=3.599997, impact=False],
+[BallisticResult: position=(23.3, -0.1), flightTime=3.759997, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=50, Speed=20]: [
+[BallisticResult: position=(0.3, 0.3), flightTime=0.02, impact=False],
+[BallisticResult: position=(5.5, 5.9), flightTime=0.54, impact=False],
+[BallisticResult: position=(9.2, 8.8), flightTime=1.04, impact=False],
+[BallisticResult: position=(12.4, 10.0), flightTime=1.559999, impact=False],
+[BallisticResult: position=(15.0, 9.9), flightTime=2.059999, impact=False],
+[BallisticResult: position=(17.4, 8.5), flightTime=2.579998, impact=False],
+[BallisticResult: position=(19.4, 6.1), flightTime=3.099998, impact=False],
+[BallisticResult: position=(21.1, 3.0), flightTime=3.599997, impact=False],
+[BallisticResult: position=(22.3, -0.1), flightTime=4.019997, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=55, Speed=20]: [
+[BallisticResult: position=(0.2, 0.3), flightTime=0.02, impact=False],
+[BallisticResult: position=(4.9, 6.4), flightTime=0.54, impact=False],
+[BallisticResult: position=(8.4, 9.7), flightTime=1.06, impact=False],
+[BallisticResult: position=(11.1, 11.1), flightTime=1.559999, impact=False],
+[BallisticResult: position=(13.6, 11.2), flightTime=2.079999, impact=False],
+[BallisticResult: position=(15.7, 10.0), flightTime=2.579998, impact=False],
+[BallisticResult: position=(17.6, 7.8), flightTime=3.099998, impact=False],
+[BallisticResult: position=(19.2, 4.7), flightTime=3.619997, impact=False],
+[BallisticResult: position=(20.5, 1.0), flightTime=4.119997, impact=False],
+[BallisticResult: position=(20.8, -0.1), flightTime=4.259997, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=60, Speed=20]: [
+[BallisticResult: position=(0.2, 0.3), flightTime=0.02, impact=False],
+[BallisticResult: position=(4.2, 6.6), flightTime=0.52, impact=False],
+[BallisticResult: position=(7.2, 10.3), flightTime=1.04, impact=False],
+[BallisticResult: position=(9.6, 12.0), flightTime=1.539999, impact=False],
+[BallisticResult: position=(11.8, 12.4), flightTime=2.059999, impact=False],
+[BallisticResult: position=(13.8, 11.4), flightTime=2.579998, impact=False],
+[BallisticResult: position=(15.6, 9.2), flightTime=3.119998, impact=False],
+[BallisticResult: position=(17.0, 6.3), flightTime=3.619997, impact=False],
+[BallisticResult: position=(18.3, 2.6), flightTime=4.139997, impact=False],
+[BallisticResult: position=(19.0, -0.1), flightTime=4.479997, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=65, Speed=20]: [
+[BallisticResult: position=(0.2, 0.4), flightTime=0.02, impact=False],
+[BallisticResult: position=(3.6, 7.1), flightTime=0.54, impact=False],
+[BallisticResult: position=(6.1, 10.9), flightTime=1.04, impact=False],
+[BallisticResult: position=(8.2, 12.9), flightTime=1.559999, impact=False],
+[BallisticResult: position=(10.1, 13.4), flightTime=2.079999, impact=False],
+[BallisticResult: position=(11.9, 12.5), flightTime=2.619998, impact=False],
+[BallisticResult: position=(13.4, 10.6), flightTime=3.119998, impact=False],
+[BallisticResult: position=(14.7, 7.7), flightTime=3.639997, impact=False],
+[BallisticResult: position=(15.8, 4.0), flightTime=4.159997, impact=False],
+[BallisticResult: position=(16.7, -0.1), flightTime=4.659997, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=70, Speed=20]: [
+[BallisticResult: position=(0.0, 0.0), flightTime=0, impact=False],
+[BallisticResult: position=(2.9, 7.2), flightTime=0.52, impact=False],
+[BallisticResult: position=(4.9, 11.4), flightTime=1.04, impact=False],
+[BallisticResult: position=(6.6, 13.5), flightTime=1.539999, impact=False],
+[BallisticResult: position=(8.2, 14.2), flightTime=2.059999, impact=False],
+[BallisticResult: position=(9.6, 13.6), flightTime=2.579998, impact=False],
+[BallisticResult: position=(10.9, 11.9), flightTime=3.079998, impact=False],
+[BallisticResult: position=(12.0, 9.1), flightTime=3.599997, impact=False],
+[BallisticResult: position=(13.0, 5.7), flightTime=4.099997, impact=False],
+[BallisticResult: position=(13.8, 1.6), flightTime=4.619997, impact=False],
+[BallisticResult: position=(14.0, -0.1), flightTime=4.819996, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=75, Speed=20]: [
+[BallisticResult: position=(0.1, 0.4), flightTime=0.02, impact=False],
+[BallisticResult: position=(2.2, 7.5), flightTime=0.52, impact=False],
+[BallisticResult: position=(3.7, 11.7), flightTime=1.04, impact=False],
+[BallisticResult: position=(5.0, 14.0), flightTime=1.539999, impact=False],
+[BallisticResult: position=(6.2, 14.9), flightTime=2.059999, impact=False],
+[BallisticResult: position=(7.3, 14.5), flightTime=2.579998, impact=False],
+[BallisticResult: position=(8.3, 12.9), flightTime=3.079998, impact=False],
+[BallisticResult: position=(9.2, 10.3), flightTime=3.579997, impact=False],
+[BallisticResult: position=(10.0, 6.8), flightTime=4.099997, impact=False],
+[BallisticResult: position=(10.7, 2.7), flightTime=4.619997, impact=False],
+[BallisticResult: position=(11.0, 0.0), flightTime=4.939996, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=80, Speed=20]: [
+[BallisticResult: position=(0.1, 0.4), flightTime=0.02, impact=False],
+[BallisticResult: position=(1.5, 7.8), flightTime=0.54, impact=False],
+[BallisticResult: position=(2.5, 12.0), flightTime=1.04, impact=False],
+[BallisticResult: position=(3.4, 14.4), flightTime=1.539999, impact=False],
+[BallisticResult: position=(4.2, 15.4), flightTime=2.039999, impact=False],
+[BallisticResult: position=(4.9, 15.1), flightTime=2.559998, impact=False],
+[BallisticResult: position=(5.6, 13.5), flightTime=3.079998, impact=False],
+[BallisticResult: position=(6.3, 11.0), flightTime=3.579997, impact=False],
+[BallisticResult: position=(6.8, 7.6), flightTime=4.099997, impact=False],
+[BallisticResult: position=(7.3, 3.5), flightTime=4.619997, impact=False],
+[BallisticResult: position=(7.6, -0.1), flightTime=5.039996, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=85, Speed=20]: [
+[BallisticResult: position=(0.0, 0.0), flightTime=0, impact=False],
+[BallisticResult: position=(0.7, 7.7), flightTime=0.52, impact=False],
+[BallisticResult: position=(1.3, 12.2), flightTime=1.04, impact=False],
+[BallisticResult: position=(1.7, 14.6), flightTime=1.539999, impact=False],
+[BallisticResult: position=(2.1, 15.7), flightTime=2.059999, impact=False],
+[BallisticResult: position=(2.5, 15.4), flightTime=2.579998, impact=False],
+[BallisticResult: position=(2.9, 14.0), flightTime=3.079998, impact=False],
+[BallisticResult: position=(3.2, 11.3), flightTime=3.599997, impact=False],
+[BallisticResult: position=(3.5, 7.9), flightTime=4.119997, impact=False],
+[BallisticResult: position=(3.7, 3.8), flightTime=4.639997, impact=False],
+[BallisticResult: position=(3.9, -0.1), flightTime=5.099996, impact=True],
+]
+},
+{
+[BallisticShotInfo: Angle=90, Speed=20]: [
+[BallisticResult: position=(0.0, 0.0), flightTime=0, impact=False],
+[BallisticResult: position=(0.0, 7.7), flightTime=0.52, impact=False],
+[BallisticResult: position=(0.0, 12.2), flightTime=1.04, impact=False],
+[BallisticResult: position=(0.0, 14.7), flightTime=1.539999, impact=False],
+[BallisticResult: position=(0.0, 15.8), flightTime=2.059999, impact=False],
+[BallisticResult: position=(0.0, 15.5), flightTime=2.579998, impact=False],
+[BallisticResult: position=(0.0, 14.0), flightTime=3.099998, impact=False],
+[BallisticResult: position=(0.0, 11.5), flightTime=3.599997, impact=False],
+[BallisticResult: position=(0.0, 8.0), flightTime=4.119997, impact=False],
+[BallisticResult: position=(0.0, 4.0), flightTime=4.639997, impact=False],
+[BallisticResult: position=(0.0, -0.1), flightTime=5.119996, impact=True],
+]
+},
+]
+}

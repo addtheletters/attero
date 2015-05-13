@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 
 public class DebugUtil {
 
@@ -19,4 +20,27 @@ public class DebugUtil {
 			return string.Format("[{0}, {1}, {2}]", vec.x, vec.y, vec.z);
 		}
 	}
+
+	public class FileIO{
+		public static string Load(string filename){
+			if(File.Exists(filename)){
+				return File.ReadAllText(filename);
+			}
+			else{
+				Debug.Log("FileIO: Could not read from file [" + filename + "]");
+				return "";
+			}
+		}
+
+		public static void Write(string filename, string text, bool overwrite){
+			if(File.Exists(filename)){
+				Debug.Log ("FileIO: File with given name exists. [" + filename + "]");
+				if(!overwrite){
+					return;
+				}
+			}
+			File.WriteAllText(filename, text);
+		}
+	}
+
 }

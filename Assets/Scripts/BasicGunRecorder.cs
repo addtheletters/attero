@@ -43,6 +43,10 @@ public class BasicGunRecorder : MonoBehaviour, IGunRecorder {
 	public void LogShotData(){
 		Debug.Log (RetrieveShotData());
 	}
+
+	public void SaveShotData(){
+		DebugUtil.FileIO.Write("stats.txt", RetrieveShotData(), true);
+	}
 }
 
 
