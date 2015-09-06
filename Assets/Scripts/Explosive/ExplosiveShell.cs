@@ -13,12 +13,19 @@ public class ExplosiveShell : MonoBehaviour, IDetonatable {
 	public bool Detonate ()
 	{
 		if(timeSinceArmed > 0){
-			// TODO make this murder the gameobject horribly
-			throw new System.NotImplementedException ();
+			this.BlowUp();
+			return true;
 		}
 		else{
-			return false;
+			return false; // shell not armed yet
 		}
+	}
+
+	protected void BlowUp(){ // name edited for family friendliness
+		// blows up
+		Debug.Log ("Shell was detonated.");
+		Destroy (this); // removes shell script
+		//Destroy(this.gameObject); // destroys entire object
 	}
 
 }
