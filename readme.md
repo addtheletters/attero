@@ -1,7 +1,9 @@
 attero
 ====
 
-Inspired by a Swedish metal song. This project includes:
+A conglomerate of Unity experiments with the goal of producing a musically-synched visual spectacle, and perhaps a tactical strategy game on top of it all to tell a harshly contrasting message about war. Inspired by movie shots of anti-aircraft tracers filling the air, and by Swedish metal songs.
+
+This project includes:
 - simple ballistics
 - tracers
 - gun turrets
@@ -14,3 +16,4 @@ planned:
 - bombs and artillery
 - planes
 - city / street / building generator
+- unit selection and movement
